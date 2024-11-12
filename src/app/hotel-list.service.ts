@@ -9,9 +9,9 @@ export class HotelListService {
 
   private clientId = 'E9GAchBq91z1l1yhDlWGveZS20G3YzET';
   private clientSecret = '43UaxDJMKWSGcc0y';
-  private tokenUrl: string = 'https://test.api.amadeus.com/v1/security/oauth2/token';
-  private citySearchUrl: string = 'https://test.api.amadeus.com/v1/reference-data/locations/cities';
-  private hotelListUrl: string = 'https://test.api.amadeus.com/v2/shopping/hotel-offers';
+  private tokenUrl: string = '/api/v1/security/oauth2/token';
+  private citySearchUrl: string = '/api/v1/reference-data/locations/cities';
+  private hotelListUrl: string = '/api/v2/shopping/hotel-offers';
 
   private accessToken: string | null = null;
   constructor(private http: HttpClient) {}
