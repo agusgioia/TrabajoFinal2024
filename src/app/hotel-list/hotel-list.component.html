@@ -1,0 +1,29 @@
+<div>
+    <h1>Buscar Hoteles</h1>
+    <input type="text" [(ngModel)]="ciudad" placeholder="Ingresa el nombre de la ciudad" />
+    
+    <input type="date" [(ngModel)]="fechaEntrada" placeholder="Fecha de entrada" />
+    <input type="date" [(ngModel)]="fechaSalida" placeholder="Fecha de salida" />
+    
+    <label for="adultos">Número de adultos:</label>
+    <input type="number" [(ngModel)]="adultos" id="adultos" min="1" [value]="adultos" />
+    
+    <label for="habitaciones">Número de habitaciones:</label>
+    <input type="number" [(ngModel)]="habitaciones" id="habitaciones" min="1" [value]="habitaciones" />
+    
+    <button (click)="buscarHoteles()">Buscar</button>
+  </div>
+  
+  <div *ngIf="error" style="color: red;">
+    {{ error }}
+  </div>
+  
+  <div *ngIf="hoteles.length > 0">
+    <h2>Hoteles encontrados:</h2>
+    <ul>
+      <li *ngFor="let hotel of hoteles">
+        {{ hotel.hotel.name }} - {{ hotel.hotel.address.lines.join(', ') }}
+      </li>
+    </ul>
+  </div>
+  
