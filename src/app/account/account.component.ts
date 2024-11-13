@@ -1,6 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HeaderComponent } from "../header/header.component";
 import { FooterComponent } from "../footer/footer.component";
+import { usuario } from '../usuario';
+import { UsuarioService } from '../usuario.service';
 
 @Component({
   selector: 'app-account',
@@ -9,6 +11,19 @@ import { FooterComponent } from "../footer/footer.component";
   templateUrl: './account.component.html',
   styleUrl: './account.component.css'
 })
-export class AccountComponent {
+export class AccountComponent implements OnInit{
+    usuariosLista: usuario[] = [];
+    constructor(private userService:UsuarioService){}
 
+    ngOnInit(): void {
+      this.listarTodosLosUsuarios();
+    }
+
+    private listarTodosLosUsuarios(){
+      this.userService.listarUsuarios().subscribe(
+        (lamb =>{
+          this.usuariosLista=lamb;
+        }
+      ));
+    }
 }
