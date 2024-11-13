@@ -24,6 +24,6 @@ export class AccountComponent implements OnInit{
         (lamb =>{
           this.usuariosLista=lamb;
         }
-      ));
+      ))
     }
 }
