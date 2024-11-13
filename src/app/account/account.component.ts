@@ -4,11 +4,12 @@ import { FooterComponent } from "../footer/footer.component";
 import { usuario } from '../usuario';
 import { UsuarioService } from '../usuario.service';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-account',
   standalone: true,
-  imports: [HeaderComponent, FooterComponent,CommonModule],
+  imports: [HeaderComponent, FooterComponent,CommonModule,FormsModule],
   templateUrl: './account.component.html',
   styleUrl: './account.component.css'
 })
