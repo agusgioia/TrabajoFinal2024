@@ -22,9 +22,10 @@ export class AccountComponent implements OnInit{
 
     private listarTodosLosUsuarios(){
       this.userService.listarUsuarios().subscribe(
-        (lamb =>{
+        lamb =>{
           this.usuariosLista=lamb;
+          console.log(this.usuariosLista);
         }
-      ))
+      )
     }
 }

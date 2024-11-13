@@ -8,7 +8,7 @@ import { usuario } from './usuario';
 })
 export class UsuarioService {
 
-  private url = 'http://localhost:8080/user/lista';
+  private url:string = 'http://localhost:8080/user/lista';
 
   constructor(private http:HttpClient) { }
   listarUsuarios():Observable<usuario[]>{
