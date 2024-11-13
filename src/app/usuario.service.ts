@@ -11,7 +11,10 @@ export class UsuarioService {
   private url:string = 'http://localhost:8080/user/lista';
 
   constructor(private http:HttpClient) { }
+  
   listarUsuarios():Observable<usuario[]>{
     return this.http.get<usuario[]>(this.url);
   }
+
+  
 }
