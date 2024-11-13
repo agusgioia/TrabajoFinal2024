@@ -12,6 +12,6 @@ export class UsuarioService {
 
   constructor(private http:HttpClient) { }
   listarUsuarios():Observable<usuario[]>{
-    return this.http.get<usuario[]>(this.url)
+    return this.http.get<usuario[]>(this.url);
   }
 }
