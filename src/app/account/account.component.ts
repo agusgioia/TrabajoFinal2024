@@ -13,7 +13,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './account.component.css'
 })
 export class AccountComponent implements OnInit{
-    usuariosLista: usuario[] = [];
+    usuariosLista!: usuario[];
     constructor(private userService:UsuarioService){}
 
     ngOnInit(): void {
