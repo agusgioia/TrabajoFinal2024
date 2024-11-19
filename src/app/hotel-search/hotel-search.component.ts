@@ -14,7 +14,7 @@ import { CommonModule } from '@angular/common';
 export class HotelSearchComponent {
 
   cityName: string = ''; 
-  iataCode: string | null = null; 
+  iataCode: string = ''; 
   checkInDate: string = ''; 
   checkOutDate: string = ''; 
   adults: number = 1; 
@@ -29,7 +29,9 @@ export class HotelSearchComponent {
         const cityData = response.data[0];
         this.iataCode = cityData.iataCode;
         console.log(this.iataCode);
-        this.buscarHoteles();
+        this.hotelList.obtenerHotelesPorCiudad(this.iataCode).subscribe(
+          Response=> this.hotels=Response
+        );
       },
       error: (err) => { 
         console.error(err); 

@@ -17,7 +17,7 @@ export class HotelListService {
   private clientSecret = '43UaxDJMKWSGcc0y';
   private tokenUrl: string = 'https://test.api.amadeus.com/v1/security/oauth2/token';
   private citySearchUrl: string = 'https://test.api.amadeus.com/v1/reference-data/locations/cities';
-  private hotelListUrl: string = 'https://test.api.amadeus.com/v1/reference-data/by-city';
+  private hotelListUrl: string = 'https://test.api.amadeus.com/v1/reference-data/locations/hotels/by-city';
 
   private accessToken: string | null = null;
 
@@ -61,6 +61,23 @@ export class HotelListService {
           return throwError(()=>new Error(error.message || 'Error del servidor'));
       })
       );    
+  }
+
+  obtenerHotelesPorCiudad(cityName:string):Observable<any>{
+    if (!this.accessToken){
+      throw new Error('No existe el token');
+    }
+
+    const headers = new HttpHeaders({
+      'Authorization':`Bearer ${this.accessToken}`
+    });
+
+    const url = `${this.hotelListUrl}/cityCode?=${cityName}`;
+    return this.http.get(url, {headers}).pipe(
+      catchError((error) =>{
+        return throwError(()=>new Error(error.message || 'Error del servidor'));
+    })
+    );
   }
 
   obtenerHoteles(iataCode: string, checkInDate: string, 

@@ -1,3 +1,18 @@
+<form>
+  <div>
+    <label for="cityName">Ciudad:</label>
+    <input id="cityName" [(ngModel)]="cityName" name="cityName" required />
+  </div>
+</form>
+<button (click)="buscarIataCode()">Buscar</button>  
+<div *ngIf="hotels.length">
+  <h2>Hoteles Disponibles</h2>
+  <ul>
+    <li *ngFor="let hotel of hotels">
+      {{ hotel.name }} - {{ hotel.address.countryCode.join(', ') }}
+    </li>
+  </ul>
+</div>
 <div class="container">
     <h1>Buscar Hoteles</h1>
     <form (submit)="buscarIataCode()">
@@ -28,7 +43,7 @@
       <h2>Hoteles Disponibles</h2>
       <ul>
         <li *ngFor="let hotel of hotels">
-          {{ hotel.name }} - {{ hotel.address.lines.join(', ') }}
+          {{ hotel.name }} - {{ hotel.address.countryCode.join(', ') }}
         </li>
       </ul>
     </div>
