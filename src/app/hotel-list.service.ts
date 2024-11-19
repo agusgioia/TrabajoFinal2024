@@ -17,7 +17,7 @@ export class HotelListService {
   private clientSecret = '43UaxDJMKWSGcc0y';
   private tokenUrl: string = 'https://test.api.amadeus.com/v1/security/oauth2/token';
   private citySearchUrl: string = 'https://test.api.amadeus.com/v1/reference-data/locations/cities';
-  private hotelListUrl: string = 'https://test.api.amadeus.com/v3/shopping/hotel-offers';
+  private hotelListUrl: string = 'https://test.api.amadeus.com/v1/reference-data/by-city';
 
   private accessToken: string | null = null;
 
