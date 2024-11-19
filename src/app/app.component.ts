@@ -1,6 +1,7 @@
 import { Component, inject, OnInit } from '@angular/core';
 import {   RouterOutlet } from '@angular/router';
 import { AuthService } from './services/auth.service';
+import firebase from 'firebase/compat/app';
 
 @Component({
   selector: 'app-root',
@@ -15,13 +16,13 @@ export class AppComponent implements OnInit{
   authService = inject(AuthService);
 
   ngOnInit(): void {
-    this.authService.user$.suscribe((user: { id:any;email: any; nombreUsuario: any; }) => {
+    this.authService.currentUser.subscribe((user:firebase.User | null) => {
       if (user){
         this.authService.currentUserSig.set({
-          id:user.id,
-          email:user.email,
-          nombreUsuario:user.nombreUsuario
-        })
+          id:user.uid,
+          email:user.email!,
+          nombreUsuario:user.displayName ||''
+        });
       }
       else{
         this.authService.currentUserSig.set(null);

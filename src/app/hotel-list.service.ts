@@ -1,6 +1,12 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, Observable, throwError } from 'rxjs';
+import { catchError, Observable, tap, throwError } from 'rxjs';
+
+interface TokenResponse { 
+  access_token: string; 
+  token_type: string; 
+  expires_in: number; 
+}
 
 @Injectable({
   providedIn: 'root'
@@ -11,12 +17,13 @@ export class HotelListService {
   private clientSecret = '43UaxDJMKWSGcc0y';
   private tokenUrl: string = 'https://test.api.amadeus.com/v1/security/oauth2/token';
   private citySearchUrl: string = 'https://test.api.amadeus.com/v1/reference-data/locations/cities';
-  private hotelListUrl: string = 'https://test.api.amadeus.com/v2/shopping/hotel-offers';
+  private hotelListUrl: string = 'https://test.api.amadeus.com/v3/shopping/hotel-offers';
 
   private accessToken: string | null = null;
+
   constructor(private http: HttpClient) {}
 
-  obtenerToken(): Observable<any> {
+  obtenerToken(): Observable<TokenResponse> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/x-www-form-urlencoded'
     });
@@ -27,53 +34,50 @@ export class HotelListService {
       'client_secret': this.clientSecret
     }).toString();
 
-    return this.http.post(this.tokenUrl, body, { headers });
+    return this.http.post<TokenResponse>(this.tokenUrl, body, { headers })
+    .pipe( tap(response => { 
+      this.setAccessToken(response.access_token); 
+    }), 
+    catchError((error) => { 
+      return throwError(() => new Error(error.message || 
+        'Server error')); 
+      }) 
+    );
   }
 
-  obtenerIATACiudad(nombreCiudad: string): Observable<any> {
-    if (!this.accessToken) {
-      throw new Error('Token de acceso no disponible');
+   
+  obtenerIataCode(cityName:string):Observable<any>{
+    if (!this.accessToken){
+      throw new Error('No existe el token');
     }
-  
+
     const headers = new HttpHeaders({
-      'Authorization': `Bearer ${this.accessToken}`
+      'Authorization':`Bearer ${this.accessToken}`
     });
-  
-    const params = { 'keyword': nombreCiudad };
-  
-    return this.http.get(this.citySearchUrl, { headers, params }).pipe(
-      catchError(error => {
-        console.error('Error en la solicitud obtenerIATACiudad:', error);
-        return throwError(error);
+    const url = `${this.citySearchUrl}?keyword=${cityName}`;
+
+    return this.http.get(url, {headers}).pipe(
+      catchError((error) =>{
+          return throwError(()=>new Error(error.message || 'Error del servidor'));
       })
-    );
+      );    
   }
-  
-  obtenerHoteles(codigoIATA: string, fechaEntrada: string, fechaSalida: string, adultos: number, habitaciones: number): Observable<any> {
-    if (!this.accessToken) {
-      throw new Error('Token de acceso no disponible');
-    }
-  
-    const headers = new HttpHeaders({
-      'Authorization': `Bearer ${this.accessToken}`
-    });
-  
-    const params = {
-      'cityCode': codigoIATA,
-      'checkInDate': fechaEntrada,
-      'checkOutDate': fechaSalida,
-      'adults': adultos,
-      'rooms': habitaciones
-    };
-  
-    return this.http.get(this.hotelListUrl, { headers, params }).pipe(
-      catchError(error => {
-        console.error('Error en la solicitud obtenerHoteles:', error);
-        return throwError(error);
-      })
-    );
+
+  obtenerHoteles(iataCode: string, checkInDate: string, 
+    checkOutDate: string, adults: number,
+     rooms: number): Observable<any> { 
+      if (!this.accessToken) { 
+        throw new Error('Access token is not set'); 
+      } 
+      const headers = new HttpHeaders({ 
+        'Authorization': `Bearer ${this.accessToken}` 
+      }); 
+      const url = `${this.hotelListUrl}?cityCode=${iataCode}&checkInDate=${checkInDate}&checkOutDate=${checkOutDate}&adults=${adults}&roomQuantity=${rooms}`; 
+      return this.http.get(url, { headers }).pipe( catchError((error) => { 
+        return throwError(() => new Error(error.message || 'Server error')); 
+      }) 
+    ); 
   }
-  
 
   setAccessToken(token: string) {
     this.accessToken = token;

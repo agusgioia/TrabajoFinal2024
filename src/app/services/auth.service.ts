@@ -1,5 +1,5 @@
 import { inject, Injectable, signal} from "@angular/core";
-import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, user } from "@angular/fire/auth";
+import { Auth, authState, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from "@angular/fire/auth";
 import { from, Observable } from "rxjs";
 import { usuarioInt} from "../usuario.interface";
 import { signOut } from "firebase/auth";
@@ -12,7 +12,7 @@ export class AuthService{
 
     private firebaseAuth = inject(Auth);
 
-    user$ = user(this.firebaseAuth);
+    currentUser = authState(this.firebaseAuth);
     currentUserSig = signal<usuarioInt | null |undefined>(undefined)
 
     register(email:string,username:string,password:string):Observable<void>{

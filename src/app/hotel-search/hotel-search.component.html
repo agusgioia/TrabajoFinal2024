@@ -1,0 +1,36 @@
+<div class="container">
+    <h1>Buscar Hoteles</h1>
+    <form (submit)="buscarIataCode()">
+      <div>
+        <label for="cityName">Ciudad:</label>
+        <input id="cityName" [(ngModel)]="cityName" name="cityName" required />
+      </div>
+      <div>
+        <label for="checkInDate">Fecha de Check-in:</label>
+        <input id="checkInDate" type="date" [(ngModel)]="checkInDate" name="checkInDate" required />
+      </div>
+      <div>
+        <label for="checkOutDate">Fecha de Check-out:</label>
+        <input id="checkOutDate" type="date" [(ngModel)]="checkOutDate" name="checkOutDate" required />
+      </div>
+      <div>
+        <label for="adults">Cantidad de Adultos:</label>
+        <input id="adults" type="number" [(ngModel)]="adults" name="adults" min="1" required />
+      </div>
+      <div>
+        <label for="rooms">Cantidad de Habitaciones:</label>
+        <input id="rooms" type="number" [(ngModel)]="rooms" name="rooms" min="1" required />
+      </div>
+      <button type="submit">Buscar</button>
+    </form>
+  
+    <div *ngIf="hotels.length">
+      <h2>Hoteles Disponibles</h2>
+      <ul>
+        <li *ngFor="let hotel of hotels">
+          {{ hotel.name }} - {{ hotel.address.lines.join(', ') }}
+        </li>
+      </ul>
+    </div>
+  </div>
+  

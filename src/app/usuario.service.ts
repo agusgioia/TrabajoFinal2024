@@ -8,13 +8,28 @@ import { usuarioInt } from './usuario.interface';
 })
 export class UsuarioService {
 
-  private url:string = 'http://localhost:8080/user/lista';
+  private url:string = 'http://localhost:8080/user';
+  private usuarios:usuarioInt[] = [];
 
   constructor(private http:HttpClient) { }
   
-  listarUsuarios():Observable<usuarioInt[]>{
-    return this.http.get<usuarioInt[]>(this.url);
+  public listarUsuarios():Observable<usuarioInt[]>{
+    return this.http.get<usuarioInt[]>(`${this.url}/lista`);
   }
 
-  
+  public getUserById(id:string):Observable<usuarioInt>{
+    return this.http.get<usuarioInt>(`${this.url}/${id}`);
+  }
+
+  public NuevoUsuario(usuario:usuarioInt):Observable<usuarioInt>{
+    return this.http.post<usuarioInt>(`${this.url}/nuevo`,usuario);
+  }
+
+  public EditarUsuario(usuario:usuarioInt):Observable<usuarioInt>{
+    return this.http.put<usuarioInt>(this.url,usuario);
+  }
+
+  public EliminarUsuario(id:number){
+    return this.http.delete<usuarioInt>(`${this.url}/${id}/$borrar/`);
+  }
 }
