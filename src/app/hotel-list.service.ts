@@ -17,7 +17,7 @@ export class HotelListService {
   private clientSecret = '43UaxDJMKWSGcc0y';
   private tokenUrl: string = 'https://test.api.amadeus.com/v1/security/oauth2/token';
   private citySearchUrl: string = 'https://test.api.amadeus.com/v1/reference-data/locations/cities';
-  private hotelListUrl: string = 'https://test.api.amadeus.com/v1/reference-data/locations/hotels/by-city';
+  private hotelListUrl: string = 'https://test.api.amadeus.com/v1/reference-data/locations/hotels/by-city';//?cityCode=BCN';
 
   private accessToken: string | null = null;
 
@@ -63,7 +63,7 @@ export class HotelListService {
       );    
   }
 
-  obtenerHotelesPorCiudad(cityName:string):Observable<any>{
+  obtenerHotelesPorCiudad(iataCode:string):Observable<any>{
     if (!this.accessToken){
       throw new Error('No existe el token');
     }
@@ -72,7 +72,7 @@ export class HotelListService {
       'Authorization':`Bearer ${this.accessToken}`
     });
 
-    const url = `${this.hotelListUrl}/cityCode?=${cityName}`;
+    const url = `${this.hotelListUrl}?cityCode=${iataCode}&radius=5&radiusUnit=KM&hotelSource=ALL`;
     return this.http.get(url, {headers}).pipe(
       catchError((error) =>{
         return throwError(()=>new Error(error.message || 'Error del servidor'));

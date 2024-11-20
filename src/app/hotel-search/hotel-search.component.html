@@ -1,18 +1,3 @@
-<form>
-  <div>
-    <label for="cityName">Ciudad:</label>
-    <input id="cityName" [(ngModel)]="cityName" name="cityName" required />
-  </div>
-</form>
-<button (click)="buscarIataCode()">Buscar</button>  
-<div *ngIf="hotels.length">
-  <h2>Hoteles Disponibles</h2>
-  <ul>
-    <li *ngFor="let hotel of hotels">
-      {{ hotel.name }} - {{ hotel.address.countryCode.join(', ') }}
-    </li>
-  </ul>
-</div>
 <div class="container">
     <h1>Buscar Hoteles</h1>
     <form (submit)="buscarIataCode()">
@@ -22,11 +7,11 @@
       </div>
       <div>
         <label for="checkInDate">Fecha de Check-in:</label>
-        <input id="checkInDate" type="date" [(ngModel)]="checkInDate" name="checkInDate" required />
+        <input id="checkInDate"  [(ngModel)]="checkInDate" name="checkInDate" required />
       </div>
       <div>
         <label for="checkOutDate">Fecha de Check-out:</label>
-        <input id="checkOutDate" type="date" [(ngModel)]="checkOutDate" name="checkOutDate" required />
+        <input id="checkOutDate"  [(ngModel)]="checkOutDate" name="checkOutDate" required />
       </div>
       <div>
         <label for="adults">Cantidad de Adultos:</label>
@@ -43,7 +28,7 @@
       <h2>Hoteles Disponibles</h2>
       <ul>
         <li *ngFor="let hotel of hotels">
-          {{ hotel.name }} - {{ hotel.address.countryCode.join(', ') }}
+          {{ hotel.name }} - {{ hotel.address.countryCode }}
         </li>
       </ul>
     </div>

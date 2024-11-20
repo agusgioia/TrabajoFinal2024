@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { HotelListService } from '../hotel-list.service';
 import { Observer } from 'rxjs';
-import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {  FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -29,9 +29,9 @@ export class HotelSearchComponent {
         const cityData = response.data[0];
         this.iataCode = cityData.iataCode;
         console.log(this.iataCode);
-        this.hotelList.obtenerHotelesPorCiudad(this.iataCode).subscribe(
-          Response=> this.hotels=Response
-        );
+        this.hotelList.obtenerHotelesPorCiudad(this.iataCode).subscribe({
+          next:(Response)=> this.hotels=Response.data
+        });
       },
       error: (err) => { 
         console.error(err); 
