@@ -1,36 +1,50 @@
-<div class="container">
-    <h1>Buscar Hoteles</h1>
-    <form (submit)="buscarIataCode()">
-      <div>
+<p-toast/>
+<div class="flex justify-content-center align-items-center min-h-screen w-ful">
+  <p-card header="Buscar Ofertas de Hoteles" class="w-10">
+    <form (submit)="buscarIataCode()" class="flex flex-column gap-2">
+      <div class="field ">
         <label for="cityName">Ciudad:</label>
         <input id="cityName" [(ngModel)]="cityName" name="cityName" required />
       </div>
-      <div>
+      <div class="field ">
         <label for="checkInDate">Fecha de Check-in:</label>
         <input id="checkInDate"  [(ngModel)]="checkInDate" name="checkInDate" required />
       </div>
-      <div>
+      <div class="field ">
         <label for="checkOutDate">Fecha de Check-out:</label>
         <input id="checkOutDate"  [(ngModel)]="checkOutDate" name="checkOutDate" required />
       </div>
-      <div>
+      <div class="field ">
         <label for="adults">Cantidad de Adultos:</label>
         <input id="adults" type="number" [(ngModel)]="adults" name="adults" min="1" required />
       </div>
-      <div>
+      <div class="field " >
         <label for="rooms">Cantidad de Habitaciones:</label>
         <input id="rooms" type="number" [(ngModel)]="rooms" name="rooms" min="1" required />
       </div>
-      <button type="submit">Buscar</button>
+      <div class="flex">
+        <button type="submit">Buscar</button>
+      </div>
     </form>
-  
+    
+    <div *ngIf="dateErrorMessage" style="color: red;">
+       {{ dateErrorMessage }} 
+    </div>
+
     <div *ngIf="hotels.length">
-      <h2>Hoteles Disponibles</h2>
+      <h2>Lista de Hoteles Por Ciudad</h2>
       <ul>
         <li *ngFor="let hotel of hotels">
-          {{ hotel.name }} - {{ hotel.address.countryCode }}
+          {{ hotel.name }} 
+        </li>
+      </ul>
+      <h2>Lista de Hoteles Disponibles</h2>
+      <ul>
+        <li *ngFor="let hotel of hotelsOfferts">
+          {{hotel|json}}
         </li>
       </ul>
     </div>
-  </div>
+  </p-card>
+</div>
   

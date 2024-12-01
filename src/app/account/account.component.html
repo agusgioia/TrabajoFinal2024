@@ -1,13 +1,36 @@
-<app-header></app-header>
-<div class="container">
-    <div class="container text-center">
-        <h2>Gestión de Usuarios</h2>
-    </div>
-    <ul>
-      <li *ngFor="let usuario of usuariosLista">
-          {{usuario.email}} - {{usuario.nombreUsuario}}
-      </li>
-    </ul>
+<p-toast/>
+<div class="flex justify-content-center align-items-center min-h-screen w-ful">
+    <p-card header="Formulario Usuario" class="w-10">
+        <form 
+            [formGroup]="formUser"
+            (ngSubmit)="updateUser()"
+            class="flex flex-column gap-2">
+
+            <div class="field gap-1">
+                <label for="nombreUsuario">Nombre de Usuario</label>
+                <input type="text" pInputText formControlName="nombreUsuario"/>
+            </div>
+            <div class="field gap-1">
+                <label for="email">Email</label>
+                <input type="text" pInputText formControlName="email"/>
+            </div>
+            <div class="field gap-1">
+                <label for="edad">Edad</label>
+                <p-inputNumber inputId="integeronly" formControlName="edad"/>
+            </div>
+            <div class="field gap-1">
+                <label for="genero">Genero</label>
+                <input type="text" pInputText formControlName="genero"/>
+            </div>
+            <div class="field gap-1">
+                <label for="presupuesto">Presupuesto</label>
+                <p-inputNumber inputId="integeronly" formControlName="presupuesto"/>
+            </div>
+            <div class="flex">
+                <p-button label="Guardar" type="submit"></p-button>
+            </div>
+        </form>
+    </p-card>
 </div>
-<app-user-form></app-user-form>
-<app-footer></app-footer>
+
+

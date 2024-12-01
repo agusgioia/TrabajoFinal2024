@@ -1,6 +1,6 @@
 {
   "hosting": {
-    "public": "dist/personaliza-tu-viaje/browser",
+    "public": "dist/personaliza-tu-viaje",
     "ignore": [
       "firebase.json",
       "**/.*",

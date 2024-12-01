@@ -1,34 +1,18 @@
-import { Component, inject, OnInit } from '@angular/core';
-import {   RouterOutlet } from '@angular/router';
-import { AuthService } from './services/auth.service';
-import firebase from 'firebase/compat/app';
+import { Component  } from '@angular/core';
+import { RouterOutlet } from '@angular/router';
+import { HeaderComponent } from "./header/header.component";
+import { FooterComponent } from "./footer/footer.component";
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet],
+  imports: [RouterOutlet, HeaderComponent, FooterComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent implements OnInit{
+export class AppComponent {
   title = 'personalizatuviaje';
 
-  authService = inject(AuthService);
-
-  ngOnInit(): void {
-    this.authService.currentUser.subscribe((user:firebase.User | null) => {
-      if (user){
-        this.authService.currentUserSig.set({
-          id:user.uid,
-          email:user.email!,
-          nombreUsuario:user.displayName ||''
-        });
-      }
-      else{
-        this.authService.currentUserSig.set(null);
-      }
-      console.log(this.authService.currentUserSig());
-    });
-  }
+  
 
 }

@@ -18,6 +18,8 @@ export class HotelListService {
   private tokenUrl: string = 'https://test.api.amadeus.com/v1/security/oauth2/token';
   private citySearchUrl: string = 'https://test.api.amadeus.com/v1/reference-data/locations/cities';
   private hotelListUrl: string = 'https://test.api.amadeus.com/v1/reference-data/locations/hotels/by-city';//?cityCode=BCN';
+  private hotelSearchUrl:string = 'https://test.api.amadeus.com/v3/shopping/hotel-offers';// ?hotelIds=MCLONGHM'
+  private hotelBookingUrl:string = 'https://test.api.amadeus.com/v2/booking/hotel-orders';
 
   private accessToken: string | null = null;
 
@@ -47,10 +49,17 @@ export class HotelListService {
 
    
   obtenerIataCode(cityName:string):Observable<any>{
+    this.obtenerToken().subscribe({
+      next:(Response) => {
+        this.accessToken = Response.access_token;
+      },
+      error:(err) => {
+        console.error(err);
+      },
+    });
     if (!this.accessToken){
       throw new Error('No existe el token');
     }
-
     const headers = new HttpHeaders({
       'Authorization':`Bearer ${this.accessToken}`
     });
@@ -72,7 +81,7 @@ export class HotelListService {
       'Authorization':`Bearer ${this.accessToken}`
     });
 
-    const url = `${this.hotelListUrl}?cityCode=${iataCode}&radius=5&radiusUnit=KM&hotelSource=ALL`;
+    const url = `${this.hotelListUrl}?cityCode=${iataCode}`;
     return this.http.get(url, {headers}).pipe(
       catchError((error) =>{
         return throwError(()=>new Error(error.message || 'Error del servidor'));
@@ -80,7 +89,7 @@ export class HotelListService {
     );
   }
 
-  obtenerHoteles(iataCode: string, checkInDate: string, 
+  obtenerHoteles(hotelId: string, checkInDate: string, 
     checkOutDate: string, adults: number,
      rooms: number): Observable<any> { 
       if (!this.accessToken) { 
@@ -89,11 +98,27 @@ export class HotelListService {
       const headers = new HttpHeaders({ 
         'Authorization': `Bearer ${this.accessToken}` 
       }); 
-      const url = `${this.hotelListUrl}?cityCode=${iataCode}&checkInDate=${checkInDate}&checkOutDate=${checkOutDate}&adults=${adults}&roomQuantity=${rooms}`; 
+      const url = `${this.hotelSearchUrl}?hotelIds=${hotelId}&adults=${adults}&checkInDate=${checkInDate}&checkOutDate=${checkOutDate}&roomQuantity=${rooms}`; 
       return this.http.get(url, { headers }).pipe( catchError((error) => { 
         return throwError(() => new Error(error.message || 'Server error')); 
       }) 
     ); 
+  }
+
+  reservarHotel(hotelId:string){
+    if (!this.accessToken) { 
+      throw new Error('Access token is not set'); 
+    } 
+    const headers = new HttpHeaders({ 
+      'Authorization': `Bearer ${this.accessToken}` 
+    }); 
+
+    const url = `${this.hotelBookingUrl}?hotelIds=${hotelId}`;
+    return this.http.post(url, {headers}).pipe(
+      catchError ((error) =>{
+        return throwError(() => new Error(error.message || 'Server error')); 
+      })
+    );
   }
 
   setAccessToken(token: string) {

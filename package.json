@@ -20,10 +20,13 @@
     "@angular/platform-browser-dynamic": "^18.2.0",
     "@angular/router": "^18.2.0",
     "@auth0/auth0-angular": "^2.2.3",
+    "@firebase/auth": "^1.8.1",
     "@ionic/angular": "^8.4.0",
     "axios": "^1.7.7",
     "core-js": "^3.39.0",
     "firebase": "^10.14.1",
+    "primeflex": "^3.3.1",
+    "primeng": "^17.18.12",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "^0.14.10"

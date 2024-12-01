@@ -1,7 +1,11 @@
-<div class="container">
-    <h1>Buscar Ofertas de Vuelos</h1>
-    <form [formGroup]="flightForm" (ngSubmit)="onSubmit()">
-      <div>
+<p-toast/>
+<div class="flex justify-content-center align-items-center min-h-screen w-ful">
+  <p-card header="Buscar Ofertas de Vuelos" class="w-10">  
+    <form 
+    [formGroup]="flightForm" 
+    (ngSubmit)="onSubmit()" 
+    class="flex flex-column gap-2">
+      <div class="field gap-1">
         <label for="origin">Lugar de Origen:</label>
         <input id="origin" formControlName="origin" />
         <div *ngIf="flightForm.get('origin')?.invalid && flightForm.get('origin')?.touched">
@@ -9,7 +13,7 @@
         </div>
       </div>
   
-      <div>
+      <div class="field gap-1">
         <label for="destination">Lugar de Destino:</label>
         <input id="destination" formControlName="destination" />
         <div *ngIf="flightForm.get('destination')?.invalid && flightForm.get('destination')?.touched">
@@ -17,7 +21,7 @@
         </div>
       </div>
   
-      <div>
+      <div class="field gap-1">
         <label for="departureDate">Fecha de Salida:</label>
         <input id="departureDate" type="date" formControlName="departureDate" />
         <div *ngIf="flightForm.get('departureDate')?.invalid && flightForm.get('departureDate')?.touched">
@@ -25,7 +29,7 @@
         </div>
       </div>
   
-      <div>
+      <div class="field gap-1">
         <label for="returnDate">Fecha de Vuelta (Opcional):</label>
         <input id="returnDate" type="date" formControlName="returnDate" />
         <div *ngIf="flightForm.get('returnDate')?.invalid && flightForm.get('returnDate')?.touched">
@@ -33,20 +37,28 @@
         </div>
       </div>
   
-      <div>
+      <div class="field gap-1">
         <label for="adults">Cantidad de Adultos:</label>
         <input id="adults" type="number" formControlName="adults" min="1" />
         <div *ngIf="flightForm.get('adults')?.invalid && flightForm.get('adults')?.touched">
           <small>La cantidad de adultos debe ser al menos 1.</small>
         </div>
       </div>
-  
-      <button type="submit" [disabled]="flightForm.invalid">Buscar</button>
+      <div class="flex">
+        <button type="submit" [disabled]="flightForm.invalid">Buscar</button>
+      </div>
     </form>
   
     <div *ngIf="flights">
-      <h2>Ofertas de Vuelos Disponibles</h2>
-      <pre>{{ flights | json }}</pre>
+      <ul>
+        <li *ngFor="let vuelo of flights">
+          {{ vuelo.id}} <br>  
+          Precio base = {{vuelo.price.base}} Moneda = {{vuelo.price.currency}} Fees = {{vuelo.price.fees}},{{vuelo.price.fees.type}} <br>
+          GrandTotal = {{vuelo.price.grandTotal}}, Total = {{vuelo.price.total}}<br>
+          {{vuelo.pricingOptions.fareType}} {{vuelo.pricingOptions.includedCheckedBagsOnly}}
+        </li>
+      </ul>
     </div>
-  </div>
+  </p-card>
+</div>
   

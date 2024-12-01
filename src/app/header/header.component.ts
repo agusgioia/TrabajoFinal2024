@@ -1,8 +1,9 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { AuthService } from '../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { AuthService, usuarioInt } from '../services/auth.service';
+
 @Component({
   selector: 'app-header',
   standalone: true,
@@ -11,18 +12,28 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './header.component.css'
 })
 export class HeaderComponent implements OnInit{
+  
   authService = inject(AuthService);
-  isLoggedIn = false;
 
   ngOnInit(): void {
-    this.authService.currentUser.subscribe((user: any)=>{
-      this.isLoggedIn = !!user;
-    })
+    this.authService.user$.subscribe((user:usuarioInt) =>{
+      if (user){
+        this.authService.currentUserSig.set({
+          id:user.id!,
+          email: user.email!,
+          username: user.username!,
+        });
+        console.log(this.authService.currentUserSig());
+      }
+      else{
+        this.authService.currentUserSig.set(null);
+        console.log(this.authService.currentUserSig());
+      }
+    });
   }
 
-  logout():void{
-    this.authService.logout().subscribe(
-      ()=>{console.log('El usuario se deslogueo')}
-    );
+  logout(){
+    this.authService.logout();
   }
+  
 }

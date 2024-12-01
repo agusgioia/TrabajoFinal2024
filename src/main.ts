@@ -10,6 +10,8 @@ import { initializeApp } from 'firebase/app';
 import { provideAuth } from '@angular/fire/auth';
 import { getAuth } from 'firebase/auth';
 import { provideFirestore, getFirestore }from '@angular/fire/firestore';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
+import { MessageService } from 'primeng/api';
 
 bootstrapApplication(AppComponent, {
   providers:[
@@ -28,7 +30,9 @@ bootstrapApplication(AppComponent, {
         })
       ),
     provideAuth(()=>getAuth()),
-    provideFirestore(() => getFirestore())
+    provideFirestore(() => getFirestore()),
+    provideAnimationsAsync(),
+    MessageService
   ]
 })
   .catch((err) => console.error(err));

@@ -13,15 +13,18 @@
         <li><a routerLink="/subscribe" class="nav-link px-2">Subscribe</a></li>
       </ul>
 
+      @if (authService.currentUserSig()==null) {
         <div class="col-md-3 text-end">
         <button routerLink="/login" type="button" class="btn btn-outline-primary me-2">Log-in</button>
         <button routerLink="/register" type="button" class="btn btn-primary">Sign-Up</button>
-      </div>
-      
+        </div>
+      }
+      @if (authService.currentUserSig()) {
       <div class="col-md-3 text-end">
-        <span (click)="logout()">Log-Out</span>
+        <button (click)="logout()">Log-Out</button>
       </div> 
-      
+    }
+     
             
     </header>
 </div>
