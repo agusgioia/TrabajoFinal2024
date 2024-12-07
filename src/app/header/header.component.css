@@ -1,0 +1,14 @@
+.p-button-xs {
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+}
+
+.p-button-danger {
+  background-color: #f44336;
+  border-color: #f44336;
+}
+
+.p-button-danger:hover {
+  background-color: #d32f2f;
+  border-color: #d32f2f;
+}

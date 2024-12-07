@@ -2,9 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FlightService } from '../services/flight.service';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { vuelo } from '../vuelo.interface';
+import { FlightOffer } from '../vuelo.interface';
 import { ToastModule } from 'primeng/toast';
 import { CardModule } from 'primeng/card';
+import { HotelListService } from '../services/hotel-list.service';
 
 @Component({
   selector: 'app-flight-search',
@@ -16,9 +17,9 @@ import { CardModule } from 'primeng/card';
 export class FlightSearchComponent implements OnInit{
 
   flightForm!: FormGroup; 
-  flights: vuelo[]=[]; 
+  flights: FlightOffer[]=[]; 
   
-  constructor(private fb: FormBuilder, private flightSearchService: FlightService) {} 
+  constructor(private fb: FormBuilder, private flightSearchService: FlightService, private nameService:HotelListService) {} 
   
   ngOnInit(): void { 
     this.flightForm = this.fb.group({ 
@@ -30,10 +31,13 @@ export class FlightSearchComponent implements OnInit{
     }); 
 
   } 
-  onSubmit(): void { 
-    if (this.flightForm.valid) { 
-      const formValue = this.flightForm.value; 
 
+  
+
+  onSubmit(): void { 
+    
+    if (this.flightForm.valid) { 
+      const formValue = this.flightForm.value;
       this.flightSearchService.listarVuelos( formValue.origin, formValue.destination, formValue.departureDate, 
         formValue.returnDate, formValue.adults ).subscribe({ 
           next: (response) => { 
@@ -46,5 +50,6 @@ export class FlightSearchComponent implements OnInit{
       }); 
     } 
   } 
+  
   
 }

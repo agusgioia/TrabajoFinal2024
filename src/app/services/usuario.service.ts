@@ -1,5 +1,5 @@
 import {  Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Usuario } from '../usuario.interface';
 
@@ -8,7 +8,7 @@ import { Usuario } from '../usuario.interface';
 })
 export class UsuarioService {
 
-  private url:string = 'http://localhost:8080/user';
+  private url:string = 'http://localHost:8080/user';
  
   constructor(private http:HttpClient) { }
   
@@ -26,6 +26,11 @@ export class UsuarioService {
 
   public EditarUsuario(usuario:Usuario,id:string){
     return this.http.put(`${this.url}/${id}/editar`,usuario);
+  }
+
+  public PatchUsuario(id:string, usuario:Partial<Usuario>):Observable<boolean>{
+    const headers = new HttpHeaders({'Content-Type': 'application/json'});
+    return this.http.patch<boolean>(`${this.url}/${id}/patch`,usuario,{headers});
   }
 
   public EliminarUsuario(id:string){

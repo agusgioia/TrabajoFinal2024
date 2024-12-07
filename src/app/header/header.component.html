@@ -11,20 +11,20 @@
         <li><a routerLink="/trips" class="nav-link px-2">My trips</a></li>
         <li><a routerLink="/account" class="nav-link px-2">My Account</a></li>
         <li><a routerLink="/subscribe" class="nav-link px-2">Subscribe</a></li>
+        @if (authService.currentUserSig()==null) {
+          <div class="col-md-3 text-end">
+            <button routerLink="/login" type="button" class="btn btn-outline-primary me-2">Log-in</button>
+            <button routerLink="/register" type="button" class="btn btn-primary">Sign-Up</button>
+          </div>
+        }
+        @if (authService.currentUserSig()) {
+          <div class="col-md-3 text-end">
+            <p-button label="Logout" icon="pi pi-sign-out" styleClass="p-button-xs p-button-danger" (click)="logout()"></p-button>
+          </div> 
+        }
       </ul>
 
-      @if (authService.currentUserSig()==null) {
-        <div class="col-md-3 text-end">
-        <button routerLink="/login" type="button" class="btn btn-outline-primary me-2">Log-in</button>
-        <button routerLink="/register" type="button" class="btn btn-primary">Sign-Up</button>
-        </div>
-      }
-      @if (authService.currentUserSig()) {
-      <div class="col-md-3 text-end">
-        <button (click)="logout()">Log-Out</button>
-      </div> 
-    }
-     
+      
             
     </header>
 </div>

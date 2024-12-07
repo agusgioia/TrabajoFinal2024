@@ -9,12 +9,13 @@ import { MessageService } from 'primeng/api';
 import { ToastModule } from 'primeng/toast';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { Usuario } from '../usuario.interface';
-import { AuthService } from '../services/auth.service';
+import { AuthService } from '../auth/auth.service';
+import { HeaderComponent } from "../header/header.component";
 
 @Component({
   selector: 'app-account',
   standalone: true,
-  imports: [ToastModule,CardModule,ReactiveFormsModule,CommonModule,FormsModule,ButtonModule,InputNumberModule],
+  imports: [ToastModule, CardModule, ReactiveFormsModule, CommonModule, FormsModule, ButtonModule, InputNumberModule, HeaderComponent],
   templateUrl: './account.component.html',
   styleUrl: './account.component.css'
 })

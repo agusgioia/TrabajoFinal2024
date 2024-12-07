@@ -1,50 +1,85 @@
-<p-toast/>
-<div class="flex justify-content-center align-items-center min-h-screen w-ful">
+<p-toast></p-toast>
+<div class="flex justify-content-center align-items-center min-h-screen w-full">
   <p-card header="Buscar Ofertas de Hoteles" class="w-10">
-    <form (submit)="buscarIataCode()" class="flex flex-column gap-2">
-      <div class="field ">
+    <form (submit)="buscarIataCode()" class="p-fluid">
+      <div class="p-field">
         <label for="cityName">Ciudad:</label>
-        <input id="cityName" [(ngModel)]="cityName" name="cityName" required />
+        <input id="cityName" [(ngModel)]="cityName" name="cityName" pInputText required />
       </div>
-      <div class="field ">
+      <div class="p-field">
         <label for="checkInDate">Fecha de Check-in:</label>
-        <input id="checkInDate"  [(ngModel)]="checkInDate" name="checkInDate" required />
+        <input id="checkInDate" type="date" [(ngModel)]="checkInDate" name="checkInDate" pInputText required />
       </div>
-      <div class="field ">
+      <div class="p-field">
         <label for="checkOutDate">Fecha de Check-out:</label>
-        <input id="checkOutDate"  [(ngModel)]="checkOutDate" name="checkOutDate" required />
+        <input id="checkOutDate" type="date" [(ngModel)]="checkOutDate" name="checkOutDate" pInputText required />
       </div>
-      <div class="field ">
+      <div class="p-field">
         <label for="adults">Cantidad de Adultos:</label>
-        <input id="adults" type="number" [(ngModel)]="adults" name="adults" min="1" required />
+        <input id="adults" type="number" [(ngModel)]="adults" name="adults" pInputNumber min="1" required />
       </div>
-      <div class="field " >
+      <div class="p-field">
         <label for="rooms">Cantidad de Habitaciones:</label>
-        <input id="rooms" type="number" [(ngModel)]="rooms" name="rooms" min="1" required />
+        <input id="rooms" type="number" [(ngModel)]="rooms" name="rooms" pInputNumber min="1" required />
       </div>
-      <div class="flex">
-        <button type="submit">Buscar</button>
+      <div class="p-field">
+        <button type="submit" pButton label="Buscar"></button>
       </div>
     </form>
     
-    <div *ngIf="dateErrorMessage" style="color: red;">
+    <div *ngIf="dateErrorMessage" class="p-error">
        {{ dateErrorMessage }} 
     </div>
 
-    <div *ngIf="hotels.length">
-      <h2>Lista de Hoteles Por Ciudad</h2>
-      <ul>
-        <li *ngFor="let hotel of hotels">
-          {{ hotel.name }} 
-        </li>
-      </ul>
-      <h2>Lista de Hoteles Disponibles</h2>
-      <ul>
-        <li *ngFor="let hotel of hotelsOfferts">
-          {{hotel|json}}
-        </li>
-      </ul>
+    <div *ngIf="hotels">
+      <div *ngFor="let hotel of hotels">
+        <h2>Lista de Hoteles de {{cityName}}</h2>
+        {{hotel.name}} - {{hotel.hotelId}}
+      </div>
+    </div>
+
+    <div *ngIf="hotelsOffers">
+      <div *ngFor="let offer of hotelsOffers.data">
+        <h2>{{ offer.hotel.name }} ({{ offer.hotel.chainCode }})</h2>
+        <p>City Code: {{ offer.hotel.cityCode }}</p>
+        <p>Hotel ID: {{ offer.hotel.hotelId }}</p>
+        <p>Latitude: {{ offer.hotel.latitude }}</p>
+        <p>Longitude: {{ offer.hotel.longitude }}</p>
+        <p>Type: {{ offer.hotel.type }}</p>
+        <p>Available: {{ offer.available }}</p>
+      
+        <div *ngFor="let item of offer.offers">
+          <h3>Offer ID: {{ item.id }}</h3>
+          <p>Check-in Date: {{ item.checkInDate }}</p>
+          <p>Check-out Date: {{ item.checkOutDate }}</p>
+          <p>Guests: {{ item.guests.adults }}</p>
+          <p>Payment Type: {{ item.paymentType }}</p>
+          
+          <h4>Price</h4>
+          <p>Total: {{ item.price.total }} {{ item.price.currency }}</p>
+          <p>Base: {{ item.price.base }} {{ item.price.currency }}</p>
+          
+          <h4>Room</h4>
+          <p>Type: {{ item.room.type }}</p>
+          <p>Description: {{ item.room.description.text }}</p>
+          <p>Bed Type: {{ item.room.typeEstimated.bedType }}</p>
+          <p>Beds: {{ item.room.typeEstimated.beds }}</p>
+          
+          <h4>Policies</h4>
+          <div *ngFor="let policy of item.policies.cancellations">
+            <p>Deadline: {{ policy.deadline }}</p>
+            <p>Amount: {{ policy.amount }}</p>
+          </div>
+          
+          <h4>Price Variations</h4>
+          <p>Average Base Price: {{ item.price.variations.average.base }} {{ item.price.currency }}</p>
+          <div *ngFor="let change of item.price.variations.changes">
+            <p>Price Change: {{ change.base }} {{ item.price.currency }} ({{ change.startDate }} - {{ change.endDate }})</p>
+          </div>
+          
+          <p><a [href]="item.self" target="_blank">More Info</a></p>
+        </div>
+      </div>
     </div>
   </p-card>
 </div>
-  

@@ -5,18 +5,20 @@ import {  FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ToastModule } from 'primeng/toast';
 import { CardModule } from 'primeng/card';
+import { HotelArray } from '../hotel.interface';
+import { ButtonModule } from 'primeng/button';
 
-export interface hotel{
-  data:any[];
+interface HotelLi{
   hotelId:string;
   name:string;
-  offers:string;
+  iataCode:string;
+  lastUpdate:string;
 }
 
 @Component({
   selector: 'app-hotel-search',
   standalone: true,
-  imports: [ReactiveFormsModule,FormsModule,CommonModule,ToastModule,CardModule],
+  imports: [ReactiveFormsModule,FormsModule,CommonModule,ToastModule,CardModule,ButtonModule],
   templateUrl: './hotel-search.component.html',
   styleUrl: './hotel-search.component.css'
 })
@@ -28,9 +30,9 @@ export class HotelSearchComponent {
   checkOutDate: string = ''; 
   adults: number = 1; 
   rooms: number = 1; 
-  hotels: hotel[] = [];
+  hotels: HotelLi[] = [];
   id: string[] = [];
-  hotelsOfferts: hotel[]=[];
+  hotelsOffers: HotelArray ={data:[]};
   dateErrorMessage:string|null=null;
 
   constructor(private hotelList: HotelListService) {}
@@ -62,7 +64,7 @@ export class HotelSearchComponent {
               this.hotelList.obtenerHoteles(hotel.hotelId, this.checkInDate, 
                 this.checkOutDate, this.adults, this.rooms).subscribe({
                   next:(Response)=>{
-                      this.hotelsOfferts[i++]=Response;
+                      this.hotelsOffers=Response;
                       console.log(Response);
                   }
                 })

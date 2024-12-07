@@ -1,39 +1,32 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AuthService, usuarioInt } from '../services/auth.service';
+import { AuthService } from '../auth/auth.service';
+import { ButtonModule } from 'primeng/button';
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [RouterLink,CommonModule,FormsModule],
+  imports: [RouterLink,CommonModule,FormsModule,ButtonModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
 export class HeaderComponent implements OnInit{
   
   authService = inject(AuthService);
+  router = inject(Router);
 
   ngOnInit(): void {
-    this.authService.user$.subscribe((user:usuarioInt) =>{
-      if (user){
-        this.authService.currentUserSig.set({
-          id:user.id!,
-          email: user.email!,
-          username: user.username!,
-        });
-        console.log(this.authService.currentUserSig());
-      }
-      else{
-        this.authService.currentUserSig.set(null);
-        console.log(this.authService.currentUserSig());
-      }
-    });
+    this.authService.user$.subscribe(()=>{
+      console.log(this.authService.currentUserSig());
+    });    
   }
 
   logout(){
-    this.authService.logout();
+    this.authService.logout().subscribe(()=>{
+      this.router.navigateByUrl('/login');
+    });
   }
   
 }

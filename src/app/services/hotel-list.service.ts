@@ -1,6 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, Observable, tap, throwError } from 'rxjs';
+import { catchError, Observable, switchMap, tap, throwError } from 'rxjs';
 
 interface TokenResponse { 
   access_token: string; 
@@ -49,27 +49,17 @@ export class HotelListService {
 
    
   obtenerIataCode(cityName:string):Observable<any>{
-    this.obtenerToken().subscribe({
-      next:(Response) => {
+    return this.obtenerToken().pipe(
+      switchMap(Response =>{
         this.accessToken = Response.access_token;
-      },
-      error:(err) => {
-        console.error(err);
-      },
-    });
-    if (!this.accessToken){
-      throw new Error('No existe el token');
-    }
-    const headers = new HttpHeaders({
-      'Authorization':`Bearer ${this.accessToken}`
-    });
-    const url = `${this.citySearchUrl}?keyword=${cityName}`;
-
-    return this.http.get(url, {headers}).pipe(
-      catchError((error) =>{
-          return throwError(()=>new Error(error.message || 'Error del servidor'));
+        const headers = new HttpHeaders({'Authorization':`Bearer ${this.accessToken}`});
+        let url = `${this.citySearchUrl}?keyword=${cityName}`;
+        return this.http.get(url,{headers});
+      }),
+      catchError((error)=>{
+        return throwError(()=> new Error(error.message || 'Error del serivodr'));
       })
-      );    
+    );   
   }
 
   obtenerHotelesPorCiudad(iataCode:string):Observable<any>{

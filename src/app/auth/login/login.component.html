@@ -1,0 +1,19 @@
+<p-toast></p-toast>
+<div class="flex justify-content-center align-items-center min-h-screen">
+    <p-card header="Iniciar Sesión" [style]="{ width: '400px' }">
+      <form [formGroup]="form" (ngSubmit)="onLogin()">
+        <div class="field">
+          <label for="email">Email</label>
+          <input type="text" pInputText class="w-full" formControlName="email"/>
+        </div>
+        <div class="field">
+          <label for="password">Contraseña</label>
+          <input type="password" pInputText class="w-full" formControlName="password"/>
+        </div>
+        <p-button label="SIGN IN" styleClass="w-full" type="submit"></p-button>
+        <div class="mt-2">
+          No tienes una cuenta? <a routerLink="/register">Registrarse</a>
+        </div>
+      </form>
+    </p-card>
+  </div>
