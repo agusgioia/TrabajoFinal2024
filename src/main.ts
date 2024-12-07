@@ -26,8 +26,8 @@ bootstrapApplication(AppComponent, {
           projectId: "personalizatuviaje-5dbe6",
           storageBucket: "personalizatuviaje-5dbe6.firebasestorage.app",
           messagingSenderId: "513056040870",
-          appId: "1:513056040870:web:55b361e75f322360081167",
-          measurementId: "G-JFE6SDXL6E"
+          appId: "1:513056040870:web:79e05841be59e2ba081167",
+          measurementId: "G-GZN1TEX1P8"
         })
       ),
     provideAuth(()=>getAuth()),

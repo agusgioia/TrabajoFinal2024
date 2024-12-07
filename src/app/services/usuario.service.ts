@@ -8,7 +8,7 @@ import { Usuario } from '../usuario.interface';
 })
 export class UsuarioService {
 
-  private url:string = 'http://localHost:8080/user';
+  private url:string = 'https://seven-squids-sniff.loca.lt/user';
  
   constructor(private http:HttpClient) { }
   
