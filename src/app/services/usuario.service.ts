@@ -8,7 +8,7 @@ import { Usuario } from '../usuario.interface';
 })
 export class UsuarioService {
 
-  private url:string = 'https://seven-squids-sniff.loca.lt/user';
+  private url:string = 'https://quiet-items-sneeze.loca.lt/user';
  
   constructor(private http:HttpClient) { }
   
