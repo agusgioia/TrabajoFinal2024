@@ -95,6 +95,7 @@ export class HotelListService {
     ); 
   }
 
+  //no implementado
   reservarHotel(hotelId:string){
     if (!this.accessToken) { 
       throw new Error('Access token is not set'); 

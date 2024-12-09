@@ -8,7 +8,7 @@ import { Usuario } from '../usuario.interface';
 })
 export class UsuarioService {
 
-  private url:string = 'https://some-seas-poke.loca.lt/user';
+  private url:string = 'http://localhost:8080/user';
  
   constructor(private http:HttpClient) { }
   
