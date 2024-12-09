@@ -12,6 +12,6 @@ export interface Usuario{
 }
 
 export interface Viajes{
-    Transporte:FlightOffer;
-    Alojamiento:HotelOffer;
+    Transporte:FlightOffer | null;
+    Alojamiento:HotelOffer | null;
   }

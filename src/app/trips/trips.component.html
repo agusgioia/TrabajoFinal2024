@@ -1,20 +1,26 @@
 <app-header></app-header>
 <h2>Lista de Viajes</h2>
-<div *ngFor="let viaje of viajes">
-    <p-card header="Viaje">
-        <ng-template pTemplate="header">
-            <img alt="Card" src="https://primefaces.org/cdn/primeng/images/card-ng.jpg" />
-        </ng-template>
-        <p>
-        {{viaje.Alojamiento.hotel.name}} - {{viaje.Transporte.id}}
-        </p>
-        <ng-template pTemplate="footer">
+@if (viajes!=null){
+    <div *ngFor="let viaje of viajes">
+        <p-card header="Viaje">
+            <ng-template pTemplate="header">
+                <img alt="Card" src="https://primefaces.org/cdn/primeng/images/card-ng.jpg" />
+            </ng-template>
+            <p>
+                {{viaje.Alojamiento}} - {{viaje.Transporte}}
+            </p>
+            <ng-template pTemplate="footer">
             <div class="flex gap-3 mt-1">
                 <p-button label="Edit" class="w-full" styleClass="w-full" />
             </div>
-        </ng-template>
-    </p-card>
-</div>
+            </ng-template>
+        </p-card>
+    </div>
+}
+@if(viajes==null){
+    
+}
+
 <div class="container text-center">
     <h2>Lista de Usuarios</h2>
 </div>

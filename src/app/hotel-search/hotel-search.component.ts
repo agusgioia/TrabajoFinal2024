@@ -7,6 +7,7 @@ import { ToastModule } from 'primeng/toast';
 import { CardModule } from 'primeng/card';
 import { HotelArray } from '../hotel.interface';
 import { ButtonModule } from 'primeng/button';
+import { SharedService } from '../shared/shared.service';
 
 interface HotelLi{
   hotelId:string;
@@ -35,7 +36,7 @@ export class HotelSearchComponent {
   hotelsOffers: HotelArray ={data:[]};
   dateErrorMessage:string|null=null;
 
-  constructor(private hotelList: HotelListService) {}
+  constructor(private hotelList: HotelListService,private sharedService:SharedService) {}
 
   buscarIataCode(): void {
     const observer: Observer<any> = {
@@ -89,6 +90,8 @@ export class HotelSearchComponent {
     this.hotelList.obtenerIataCode(this.cityName).subscribe(observer);
   }
 
-  
+  onSubmit(Alojamiento:any){
+    this.sharedService.setAlojamiento(Alojamiento);
+  }
 
 }

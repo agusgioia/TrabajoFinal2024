@@ -1,28 +1,29 @@
 <p-toast></p-toast>
 <div class="flex justify-content-center align-items-center min-h-screen w-full">
   <p-card header="Buscar Ofertas de Hoteles" class="w-10">
-    <form (submit)="buscarIataCode()" class="p-fluid">
-      <div class="p-field">
+    <form (submit)="buscarIataCode()" class="flex flex-column gap-2">
+      <div class="field gap-1">
         <label for="cityName">Ciudad:</label>
         <input id="cityName" [(ngModel)]="cityName" name="cityName" pInputText required />
       </div>
-      <div class="p-field">
+      <div class="field gap-1">
         <label for="checkInDate">Fecha de Check-in:</label>
         <input id="checkInDate" type="date" [(ngModel)]="checkInDate" name="checkInDate" pInputText required />
       </div>
-      <div class="p-field">
+      <div class="field gap-1">
         <label for="checkOutDate">Fecha de Check-out:</label>
         <input id="checkOutDate" type="date" [(ngModel)]="checkOutDate" name="checkOutDate" pInputText required />
       </div>
-      <div class="p-field">
+      <div class="field gap-1">
         <label for="adults">Cantidad de Adultos:</label>
         <input id="adults" type="number" [(ngModel)]="adults" name="adults" pInputNumber min="1" required />
       </div>
-      <div class="p-field">
+      <div class="field gap-1">
         <label for="rooms">Cantidad de Habitaciones:</label>
         <input id="rooms" type="number" [(ngModel)]="rooms" name="rooms" pInputNumber min="1" required />
       </div>
-      <div class="p-field">
+      <br>
+      <div class="flex">
         <button type="submit" pButton label="Buscar"></button>
       </div>
     </form>
@@ -78,7 +79,8 @@
           </div>
           
           <p><a [href]="item.self" target="_blank">More Info</a></p>
-        </div>
+        </div >
+        <button type="button" class="btn btn-primary mt-3" label="Guardar" (onClick)="onSubmit(offer)"></button>
       </div>
     </div>
   </p-card>

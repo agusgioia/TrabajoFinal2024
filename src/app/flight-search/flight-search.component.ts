@@ -6,11 +6,13 @@ import { FlightOffer } from '../vuelo.interface';
 import { ToastModule } from 'primeng/toast';
 import { CardModule } from 'primeng/card';
 import { HotelListService } from '../services/hotel-list.service';
+import { ButtonModule } from 'primeng/button';
+import { SharedService } from '../shared/shared.service';
 
 @Component({
   selector: 'app-flight-search',
   standalone: true,
-  imports: [ReactiveFormsModule,FormsModule,CommonModule,ToastModule,CardModule],
+  imports: [ReactiveFormsModule,FormsModule,CommonModule,ToastModule,CardModule,ButtonModule],
   templateUrl: './flight-search.component.html',
   styleUrl: './flight-search.component.css'
 })
@@ -19,7 +21,10 @@ export class FlightSearchComponent implements OnInit{
   flightForm!: FormGroup; 
   flights: FlightOffer[]=[]; 
   
-  constructor(private fb: FormBuilder, private flightSearchService: FlightService, private nameService:HotelListService) {} 
+  constructor(private fb: FormBuilder, 
+    private flightSearchService: FlightService, 
+    private nameService:HotelListService,
+    private sharedService:SharedService) {} 
   
   ngOnInit(): void { 
     this.flightForm = this.fb.group({ 
@@ -51,5 +56,9 @@ export class FlightSearchComponent implements OnInit{
     } 
   } 
   
+  onGuardar(vuelo:any){
+    this.sharedService.setVuelo(vuelo);
+    console.log(vuelo);
+  }
   
 }

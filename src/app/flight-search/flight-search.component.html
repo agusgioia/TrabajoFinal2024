@@ -45,7 +45,7 @@
         </div>
       </div>
       <div class="flex">
-        <button type="submit" [disabled]="flightForm.invalid">Buscar</button>
+        <button type="submit" pButton [disabled]="flightForm.invalid">Buscar</button>
       </div>
     </form>
   <br>
@@ -94,6 +94,7 @@
           </div>
         </div>
       </div>
+      <p-button type="button" pButton label="Guardar" (onclick)="onGuardar(offer)"></p-button>
     </div>
   </div>  
   </p-card>
