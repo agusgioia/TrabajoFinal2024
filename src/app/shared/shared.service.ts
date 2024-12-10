@@ -5,20 +5,20 @@ import { Viajes } from '../usuario.interface';
   providedIn: 'root'
 })
 export class SharedService {
-  private viajes: Viajes[] = []; // Cambiar a array para manejar múltiples viajes
-
+  private viajes: Viajes[] = [];
+  private i:number = 0;
   setVuelo(value: any) {
-    if (!this.viajes[0]) {
-      this.viajes[0] = { Transporte: null, Alojamiento: null };
+    if (!this.viajes[this.i]) {
+      this.viajes[this.i] = { Transporte: null, Alojamiento: null };
     }
-    this.viajes[0].Transporte = value;
+    this.viajes[this.i++].Transporte = value;
   }
 
   setAlojamiento(value: any) {
-    if (!this.viajes[0]) {
-      this.viajes[0] = { Transporte: null, Alojamiento: null };
+    if (!this.viajes[this.i]) {
+      this.viajes[this.i] = { Transporte: null, Alojamiento: null };
     }
-    this.viajes[0].Alojamiento = value;
+    this.viajes[this.i++].Alojamiento = value;
   }
 
   getViaje(): Viajes[] {
