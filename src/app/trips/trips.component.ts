@@ -7,6 +7,7 @@ import { UsuarioService } from '../services/usuario.service';
 import { AuthService } from '../auth/auth.service';
 import { Viajes } from '../usuario.interface';
 import { HeaderComponent } from "../header/header.component";
+import { Router } from '@angular/router';
 
 
 
@@ -25,11 +26,12 @@ export class TripsComponent implements OnInit{
 
   constructor(
     private userService:UsuarioService,
-    private authService:AuthService){}
+    private authService:AuthService,
+    private router:Router){}
 
   ngOnInit(): void {
     this.listarTodosLosUsuarios();
-    console.log(this.usuario.Viajes);
+    console.log(this.usuario.listaViajes);
   }
 
   async listarTodosLosUsuarios(){
@@ -50,6 +52,10 @@ export class TripsComponent implements OnInit{
         break;
       }
     }
+  }
+
+  redirect(){
+    this.router.navigateByUrl('/home');
   }
 
 }

@@ -34,7 +34,7 @@ export class AuthService {
         edad:18,
         presupuesto:0,
         genero:'',
-        Viajes:[]
+        listaViajes:[]
       };
       console.log(response.user.uid);
       this.userService.NuevoUsuario(newUser).subscribe(
