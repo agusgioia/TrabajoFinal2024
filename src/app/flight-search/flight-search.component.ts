@@ -56,9 +56,8 @@ export class FlightSearchComponent implements OnInit{
     } 
   } 
   
-  onGuardar(vuelo:any){
+  onGuardar(vuelo:FlightOffer){
     this.sharedService.setVuelo(vuelo);
-    console.log(vuelo);
   }
   
 }

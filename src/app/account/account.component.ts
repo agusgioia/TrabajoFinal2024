@@ -20,12 +20,10 @@ import { HeaderComponent } from "../header/header.component";
   styleUrl: './account.component.css'
 })
 export class AccountComponent implements OnInit{
-  usuariosLista:Usuario[]=[];
+  
   formUser!:FormGroup;
   usuario!: Usuario;
-  docId!:string;
-
-
+  
   constructor(
     private userService:UsuarioService,
     private fu:FormBuilder,
@@ -43,23 +41,21 @@ export class AccountComponent implements OnInit{
       })
   }
 
-  getIdUserByEmail(email:string|undefined){
-    for(let i=0;i<this.usuariosLista.length;i++){
-      if (email===this.usuariosLista[i].email){
-        this.usuario = this.usuariosLista[i];
-        this.docId = this.usuariosLista[i].id;
-        break;
+  getIdUserById(){
+    this.userService.getUserById(this.authService.currentUserSig()?.id!).subscribe({
+      next:(foundUser)=>{
+        this.usuario = foundUser;
+        console.log(this.usuario);
+        this.formUser.patchValue(this.usuario);
+      },
+      error:()=>{
+        this.messageService.add({severity:'error', summary:'Error', detail:'Usuario no encontrado'});
       }
-    }
+    });
   }
 
   ngOnInit(): void {
-    this.userService.listarUsuarios().subscribe(Response =>{
-      this.usuariosLista=Response;
-      console.log(this.usuariosLista);
-      this.getIdUserByEmail(this.authService.currentUserSig()?.email);
-      this.formUser.patchValue(this.usuario);
-    });   
+    this.getIdUserById();
   }
 
   
@@ -72,8 +68,7 @@ export class AccountComponent implements OnInit{
       });
       return;
     }
-    console.log(this.formUser.value);
-    this.userService.EditarUsuario(this.formUser.value,this.docId!).subscribe({
+    this.userService.EditarUsuario(this.formUser.value,this.authService.currentUserSig()?.id!).subscribe({
       next:()=>{
         this.messageService.add({
           severity:'success',

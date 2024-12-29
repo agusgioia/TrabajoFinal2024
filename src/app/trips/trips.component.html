@@ -1,13 +1,13 @@
 <app-header></app-header>
 <h2>Lista de Viajes</h2>
-@if (viajes!=null){
-    <div *ngFor="let viaje of viajes">
+@if (usuario.Viajes!=null){
+    <div *ngFor="let viaje of usuario.Viajes">
         <p-card header="Viaje">
             <ng-template pTemplate="header">
                 <img alt="Card" src="https://primefaces.org/cdn/primeng/images/card-ng.jpg" />
             </ng-template>
             <p>
-                {{viaje.Alojamiento}} - {{viaje.Transporte}}
+                {{viaje.Alojamiento?.hotel?.name}} - {{viaje.Transporte?.price?.base}}
             </p>
             <ng-template pTemplate="footer">
             <div class="flex gap-3 mt-1">
@@ -17,27 +17,8 @@
         </p-card>
     </div>
 }
-@if(viajes==null){
+@if(usuario.Viajes==null){
     <button type="button" class="btn btn-primary" (onclick)="redirect()">NuevoViaje</button>
 }
 
-<div class="container text-center">
-    <h2>Lista de Usuarios</h2>
-</div>
-<div *ngFor="let usuario of usuariosLista">
-    <p-card header={{usuario.nombreUsuario}} subheader={{usuario.email}} [style]="{ width: '360px' }">
-        <ng-template pTemplate="header">
-            <img alt="Card" src="https://primefaces.org/cdn/primeng/images/card-ng.jpg" />
-        </ng-template>
-        <p>
-            {{usuario.id}}<br>
-            {{usuario.genero}} - {{usuario.edad}} - {{usuario.presupuesto}} 
-        </p>
-        <ng-template pTemplate="footer">
-            <div class="flex gap-3 mt-1">
-                <p-button label="Cancel" severity="secondary" class="w-full" styleClass="w-full" />
-                <p-button label="Save" class="w-full" styleClass="w-full" />
-            </div>
-        </ng-template>
-    </p-card>
-</div>
+

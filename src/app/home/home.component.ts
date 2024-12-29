@@ -25,7 +25,7 @@ export class HomeComponent {
 
   AgregarViaje(){
     const viaje = this.sharedService.getViaje(); 
-    const usuarioPatch: Partial<Usuario> = { listaViajes: viaje }; 
+    const usuarioPatch: Partial<Usuario> = { Viajes: viaje }; 
     this.userService.PatchUsuario(this.authService.currentUserSig()!.id, usuarioPatch).subscribe((response) => { 
       console.log(response); });
   }

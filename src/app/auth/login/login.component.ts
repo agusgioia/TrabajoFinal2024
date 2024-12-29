@@ -41,14 +41,11 @@ export class LoginComponent {
 
   async onLogin() {
     const rawform = this.form.getRawValue();
-    try {
-      const result =await this.authService.login(rawform.email, rawform.password);
-      if (result){
-        this.router.navigateByUrl('/home');
-      }
-    } catch (error) {
-      console.error('Error during registration', error); 
-    }
-   
+    
+      this.authService.login(rawform.email, rawform.password).subscribe(()=>{
+       this.router.navigateByUrl('/home');
+      }); 
   }
 }
+
+

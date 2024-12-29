@@ -41,7 +41,6 @@ export interface Aircraft {
 export interface LocationInfo {
   at: string;
   iataCode: string;
-  terminal: string;
 }
 
 export interface OperatingCarrier {

@@ -20,10 +20,16 @@ export class AuthService {
   user$= user(this.firebaseAuth);
   currentUserSig = signal<usuarioInt |null |undefined>(undefined);
   
-  constructor(private userService:UsuarioService){}
+  constructor(private userService:UsuarioService){
+    const storedUser = localStorage.getItem('currentUser'); 
+    if (storedUser) { 
+      this.currentUserSig.set(JSON.parse(storedUser)); 
+    }
+  }
 
+  
   register(username: string, email: string, password: string): Observable<void> { 
-    console.log('Email received for registration:', email);
+    
     const promise = createUserWithEmailAndPassword(this.firebaseAuth, email, password) 
     .then(response => {
       updateProfile(response.user, { displayName: username });
@@ -34,17 +40,17 @@ export class AuthService {
         edad:18,
         presupuesto:0,
         genero:'',
-        listaViajes:[]
+        Viajes:null
       };
       console.log(response.user.uid);
-      this.userService.NuevoUsuario(newUser).subscribe(
-        ()=>{
-          this.currentUserSig.set({
+      this.userService.NuevoUsuario(newUser).subscribe(()=>{
+          const user = ({
             id:response.user.uid,
             email:email,
             username:username
-          })
-          console.log(this.currentUserSig());
+          });
+          localStorage.setItem('currentUser', JSON.stringify(user));
+          this.currentUserSig.set(user);
       });
     })
     .catch(error => { 
@@ -57,11 +63,13 @@ export class AuthService {
   login(email:string, password:string):Observable<void>{
     const promise = signInWithEmailAndPassword(this.firebaseAuth, email, password).then(async response => { 
         const user = await firstValueFrom(this.userService.getUserById(response.user.uid));
-        this.currentUserSig.set({ 
+        const currentUser = ({ 
           id: response.user.uid, 
           email: user.email, 
           username: user.nombreUsuario
         });
+        localStorage.setItem('currentUser', JSON.stringify(currentUser));
+        this.currentUserSig.set(currentUser);
       console.log('Signal after login:', this.currentUserSig()); 
     }) 
     .catch(error => { 
@@ -73,6 +81,7 @@ export class AuthService {
 
   logout():Observable<void>{
     const promise = signOut(this.firebaseAuth).then(()=>{
+      localStorage.removeItem('currentUser');
       this.currentUserSig.set(null);
     });
     return from (promise);

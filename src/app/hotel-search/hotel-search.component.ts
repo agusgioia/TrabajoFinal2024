@@ -5,7 +5,7 @@ import {  FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ToastModule } from 'primeng/toast';
 import { CardModule } from 'primeng/card';
-import { HotelArray } from '../hotel.interface';
+import { HotelArray, HotelOffer } from '../hotel.interface';
 import { ButtonModule } from 'primeng/button';
 import { SharedService } from '../shared/shared.service';
 
@@ -90,7 +90,7 @@ export class HotelSearchComponent {
     this.hotelList.obtenerIataCode(this.cityName).subscribe(observer);
   }
 
-  onSubmit(Alojamiento:any){
+  onSubmit(Alojamiento:HotelOffer){
     this.sharedService.setAlojamiento(Alojamiento);
   }
 

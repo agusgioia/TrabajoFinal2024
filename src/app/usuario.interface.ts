@@ -8,7 +8,7 @@ export interface Usuario{
     genero?:string;
     edad?:number;
     presupuesto?:number;
-    listaViajes:Viajes[];
+    Viajes:Viajes[] | null;
 }
 
 export interface Viajes{

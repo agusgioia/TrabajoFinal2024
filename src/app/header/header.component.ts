@@ -1,8 +1,8 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AuthService } from '../auth/auth.service';
+import { AuthService, usuarioInt } from '../auth/auth.service';
 import { ButtonModule } from 'primeng/button';
 
 @Component({
@@ -14,13 +14,12 @@ import { ButtonModule } from 'primeng/button';
 })
 export class HeaderComponent implements OnInit{
   
-  authService = inject(AuthService);
-  router = inject(Router);
+  User:usuarioInt|null|undefined;
+
+  constructor(private router:Router, private authService:AuthService){}
 
   ngOnInit(): void {
-    this.authService.user$.subscribe(()=>{
-      console.log(this.authService.currentUserSig());
-    });    
+    this.User = this.authService.currentUserSig();
   }
 
   logout(){
