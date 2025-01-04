@@ -1,24 +1,29 @@
 <app-header></app-header>
 <h2>Lista de Viajes</h2>
-@if (usuario.Viajes!=null){
-    <div *ngFor="let viaje of usuario.Viajes">
+@if (usuario.viajes!=null){
+    <div *ngFor="let viaje of usuario.viajes">
         <p-card header="Viaje">
             <ng-template pTemplate="header">
                 <img alt="Card" src="https://primefaces.org/cdn/primeng/images/card-ng.jpg" />
             </ng-template>
-            <p>
-                {{viaje.Alojamiento?.hotel?.name}} - {{viaje.Transporte?.price?.base}}
-            </p>
+            <ng-template pTemplate="content">
+                <p>Vuelo:{{viaje.vuelo|json}}</p>
+                <p>Alojamiento: {{viaje.alojamiento|json}}</p>
+            </ng-template>
+            
             <ng-template pTemplate="footer">
             <div class="flex gap-3 mt-1">
-                <p-button label="Edit" class="w-full" styleClass="w-full" />
+                <p-button label="Edit" class="w-full" styleClass="w-full" ></p-button>
+            </div>
+            <div class="flex gap-3 mt-1">
+                <p-button label="Delete" class="w-full" styleClass="w-full" (click)="onDelete()"></p-button>
             </div>
             </ng-template>
         </p-card>
     </div>
 }
-@if(usuario.Viajes==null){
-    <button type="button" class="btn btn-primary" (onclick)="redirect()">NuevoViaje</button>
+@if(usuario.viajes==null){
+    <button type="button" class="btn btn-primary" (click)="redirect()">NuevoViaje</button>
 }
 
 

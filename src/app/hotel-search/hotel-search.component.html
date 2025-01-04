@@ -1,87 +1,120 @@
 <p-toast></p-toast>
 <div class="flex justify-content-center align-items-center min-h-screen w-full">
   <p-card header="Buscar Ofertas de Hoteles" class="w-10">
-    <form (submit)="buscarIataCode()" class="flex flex-column gap-2">
-      <div class="field gap-1">
-        <label for="cityName">Ciudad:</label>
-        <input id="cityName" [(ngModel)]="cityName" name="cityName" pInputText required />
+    <form 
+    [formGroup]="hotelForm"
+    (ngSubmit)="onSubmit()" 
+    class="flex flex-column gap-2">
+    <div class="field gap-1">
+      <label for="cityName">Ciudad:</label>
+      <input id="cityName" pInputText class="w-50" formControlName="cityName" />
+      <div *ngIf="hotelForm.get('cityName')?.invalid && hotelForm.get('cityName')?.touched">
+        <small>El nombre de la ciudad es obligatorio.</small>
       </div>
-      <div class="field gap-1">
-        <label for="checkInDate">Fecha de Check-in:</label>
-        <input id="checkInDate" type="date" [(ngModel)]="checkInDate" name="checkInDate" pInputText required />
+    </div>
+
+    <div class="field gap-1">
+      <label for="checkInDate">Fecha de Entrada:</label>
+      <input id="checkInDate" type="date" pInputText class="w-50" formControlName="checkInDate" />
+      <div *ngIf="hotelForm.get('checkInDate')?.invalid && hotelForm.get('checkInDate')?.touched">
+        <small>La fecha de entrada es obligatoria.</small>
       </div>
-      <div class="field gap-1">
-        <label for="checkOutDate">Fecha de Check-out:</label>
-        <input id="checkOutDate" type="date" [(ngModel)]="checkOutDate" name="checkOutDate" pInputText required />
+    </div>
+
+    <div class="field gap-1">
+      <label for="checkOutDate">Fecha de Salida:</label>
+      <input id="checkOutDate" type="date" pInputText class="w-50" formControlName="checkOutDate" />
+      <div *ngIf="hotelForm.get('checkOutDate')?.invalid && hotelForm.get('checkOutDate')?.touched">
+        <small>La fecha de salida es obligatoria.</small>
       </div>
-      <div class="field gap-1">
-        <label for="adults">Cantidad de Adultos:</label>
-        <input id="adults" type="number" [(ngModel)]="adults" name="adults" pInputNumber min="1" required />
+    </div>
+
+    <div class="field gap-1">
+      <label for="adults">Número de Adultos:</label>
+      <input id="adults" type="number" pInputText class="w-50" formControlName="adults" min="1"/>
+      <div *ngIf="hotelForm.get('adults')?.invalid && hotelForm.get('adults')?.touched">
+        <small>La Cantidad de adultos debe ser al menos 1.</small>
       </div>
-      <div class="field gap-1">
-        <label for="rooms">Cantidad de Habitaciones:</label>
-        <input id="rooms" type="number" [(ngModel)]="rooms" name="rooms" pInputNumber min="1" required />
+    </div>
+
+    <div class="field gap-1">
+      <label for="rooms">Cantidad de Habitaciones:</label>
+      <input id="rooms" type="number" pInputText class="w-50" formControlName="rooms" min="1" />
+      <div *ngIf="hotelForm.get('rooms')?.invalid && hotelForm.get('rooms')?.touched">
+        <small>La cantidad de habitaciones debe ser al menos 1.</small>
       </div>
-      <br>
-      <div class="flex">
-        <button type="submit" pButton label="Buscar"></button>
-      </div>
+    </div>
+    
+    <div class="flex">
+      <button type="submit" pButton [disabled]="hotelForm.invalid">Buscar</button>
+    </div>
     </form>
     
     <div *ngIf="dateErrorMessage" class="p-error">
        {{ dateErrorMessage }} 
     </div>
 
-    <div *ngIf="hotels">
+    <!-- <div *ngIf="hotels">
       <div *ngFor="let hotel of hotels">
         <h2>Lista de Hoteles de {{cityName}}</h2>
         {{hotel.name}} - {{hotel.hotelId}}
       </div>
-    </div>
+    </div> -->
 
-    <div *ngIf="hotelsOffers">
-      <div *ngFor="let offer of hotelsOffers.data">
-        <h2>{{ offer.hotel.name }} ({{ offer.hotel.chainCode }})</h2>
-        <p>City Code: {{ offer.hotel.cityCode }}</p>
-        <p>Hotel ID: {{ offer.hotel.hotelId }}</p>
-        <p>Latitude: {{ offer.hotel.latitude }}</p>
-        <p>Longitude: {{ offer.hotel.longitude }}</p>
-        <p>Type: {{ offer.hotel.type }}</p>
-        <p>Available: {{ offer.available }}</p>
-      
-        <div *ngFor="let item of offer.offers">
-          <h3>Offer ID: {{ item.id }}</h3>
-          <p>Check-in Date: {{ item.checkInDate }}</p>
-          <p>Check-out Date: {{ item.checkOutDate }}</p>
-          <p>Guests: {{ item.guests.adults }}</p>
-          <p>Payment Type: {{ item.paymentType }}</p>
+    <div *ngIf="hotelsOffers || hotelsOffers!=[]">
+
+      <p-card 
+      *ngFor="let offer of hotelsOffers"
+      header="Hotel"
+      class="col-12 md:col-6 lg:col-4">
+        <ng-template pTemplate="content">  
+          <div *ngFor="let data of offer.data">
+            <h2>{{ data.hotel.name }}</h2>
+            <p>City Code: {{ data.hotel.cityCode }}</p>
+            <p>Latitude: {{ data.hotel.latitude }}</p>
+            <p>Longitude: {{ data.hotel.longitude }}</p>
+            <p>Available: {{ data.available }}</p>
+
+            <div *ngFor="let hotelOffer of data.offers">
+
+              <p>Check-in Date: {{ hotelOffer.checkInDate }}</p>
+              <p>Check-out Date: {{ hotelOffer.checkOutDate }}</p>
+              <p>Guests: {{ hotelOffer.guests.adults }}</p>
+              <p>Payment Type: {{ hotelOffer.policies.paymentType }}</p>
           
-          <h4>Price</h4>
-          <p>Total: {{ item.price.total }} {{ item.price.currency }}</p>
-          <p>Base: {{ item.price.base }} {{ item.price.currency }}</p>
+              <h4>Price</h4>
+              <p>Total: {{ hotelOffer.price.total }} {{ hotelOffer.price.currency }}</p>
+              <p>Base: {{ hotelOffer.price.base }} {{ hotelOffer.price.currency }}</p>
+
+              <h6>Variations</h6>
+              <p>Average base: {{hotelOffer.price.variations.average.base}}</p>
+              <p>Changes</p>
+              <div *ngFor="let changes of hotelOffer.price.variations.changes">
+                <p>total: {{changes.total}}</p>
+                <p>startDate: {{changes.startDate}}</p>
+                <p>endDate: {{changes.endDate}}</p>
+              </div>
+              
+              <h4>Room</h4>
+                <p>Type: {{ hotelOffer.room.type }}</p>
+                <p>Description: {{ hotelOffer.room.description.text }}</p>
+                <p>Bed Type: {{ hotelOffer.room.typeEstimated.bedType }}</p>
+                <p>Number of beds: {{hotelOffer.room.typeEstimated.beds}}</p>
           
-          <h4>Room</h4>
-          <p>Type: {{ item.room.type }}</p>
-          <p>Description: {{ item.room.description.text }}</p>
-          <p>Bed Type: {{ item.room.typeEstimated.bedType }}</p>
-          <p>Beds: {{ item.room.typeEstimated.beds }}</p>
-          
-          <h4>Policies</h4>
-          <div *ngFor="let policy of item.policies.cancellations">
-            <p>Deadline: {{ policy.deadline }}</p>
-            <p>Amount: {{ policy.amount }}</p>
-          </div>
-          
-          <h4>Price Variations</h4>
-          <p>Average Base Price: {{ item.price.variations.average.base }} {{ item.price.currency }}</p>
-          <div *ngFor="let change of item.price.variations.changes">
-            <p>Price Change: {{ change.base }} {{ item.price.currency }} ({{ change.startDate }} - {{ change.endDate }})</p>
-          </div>
-          
-          <p><a [href]="item.self" target="_blank">More Info</a></p>
-        </div >
-        <button type="button" class="btn btn-primary mt-3" label="Guardar" (onClick)="onSubmit(offer)"></button>
-      </div>
+              <h4>cancellationPolicy:</h4>
+              <div *ngFor="let cancellation of hotelOffer.policies.cancellations">
+                <p>Description: {{cancellation.description.text}}</p>
+                <p>Type: {{cancellation.type}}</p>
+              </div>
+            </div>  
+          </div >
+        </ng-template>
+        
+        <ng-template pTemplate="footer">  
+          <p-button type="button" pButton label="Guardar" (click)="onGuardar(offer)"></p-button>
+        </ng-template>
+        
+      </p-card>
     </div>
   </p-card>
 </div>

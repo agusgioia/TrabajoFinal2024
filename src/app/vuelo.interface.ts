@@ -1,109 +1,51 @@
 export interface FlightOffer {
   id: string;
-  instantTicketingRequired: boolean;
-  isUpsellOffer: boolean;
-  itineraries: Itinerary[];
-  lastTicketingDate: string;
-  lastTicketingDateTime: string;
-  nonHomogeneous: boolean;
-  numberOfBookableSeats: number;
-  oneWay: boolean;
-  price: Price;
-  pricingOptions: PricingOptions;
-  source: string;
-  travelerPricings: TravelerPricing[];
-  type: string;
+  itineraries: SimplifiedItinerary[];
+  price: SimplifiedPrice;
+  pricingOptions: SimplifiedPricingOptions;
+  travelerPricings: SimplifiedTravelerPricing[];
   validatingAirlineCodes: string[];
+  lastTicketingDate: string;
 }
 
-export interface Itinerary {
+export interface SimplifiedItinerary {
   duration: string;
-  segments: Segment[];
+  segments: SimplifiedSegment[];
 }
 
-export interface Segment {
-  aircraft: Aircraft;
-  arrival: LocationInfo;
-  blacklistedInEU: boolean;
-  carrierCode: string;
-  departure: LocationInfo;
+export interface SimplifiedSegment {
+  aircraft: AircraftCode; // Aircraft code
+  departure: SimplifiedLocationInfo;
+  arrival: SimplifiedLocationInfo;
   duration: string;
-  id: string;
-  number: string;
-  numberOfStops: number;
-  operating: OperatingCarrier;
-}
-
-export interface Aircraft {
-  code: string;
-}
-
-export interface LocationInfo {
-  at: string;
-  iataCode: string;
-}
-
-export interface OperatingCarrier {
   carrierCode: string;
+  number: string; // Flight number
+}
+export interface AircraftCode{
+  code:string;
 }
 
-export interface Price {
-  additionalServices: AdditionalService[];
+export interface SimplifiedLocationInfo {
+  at: string; // Date and time
+  iataCode: string; // Airport code
+}
+
+export interface SimplifiedPrice {
   base: string;
   currency: string;
-  fees: Fee[];
   grandTotal: string;
-  total: string;
 }
 
-export interface AdditionalService {
-  amount: string;
-  type: string;
+export interface SimplifiedPricingOptions {
+  fareType: string[]; // Types of fares available
 }
 
-export interface Fee {
-  amount: string;
-  type: string;
+export interface SimplifiedTravelerPricing {
+  cabin: string; // Cabin class (e.g., Economy, Business)
+  price: SimplifiedTravelerPrice;
 }
 
-export interface PricingOptions {
-  fareType: string[];
-  includedCheckedBagsOnly: boolean;
-}
-
-export interface TravelerPricing {
-  fareDetailsBySegment: FareDetail[];
-  fareOption: string;
-  price: TravelerPrice;
-  travelerId: string;
-  travelerType: string;
-}
-
-export interface FareDetail {
-  cabin: string;
-  class: string;
-  fareBasis: string;
-  includedCheckedBags: IncludedCheckedBags;
-  segmentId: string;
-  amenities: Amenity[];
-}
-
-export interface IncludedCheckedBags {
-  quantity: number;
-}
-
-export interface Amenity {
-  amenityProvider: AmenityProvider;
-  amenityType: string;
-  description: string;
-  isChargeable: boolean;
-}
-
-export interface AmenityProvider {
-  name: string;
-}
-
-export interface TravelerPrice {
+export interface SimplifiedTravelerPrice {
   base: string;
   currency: string;
   total: string;

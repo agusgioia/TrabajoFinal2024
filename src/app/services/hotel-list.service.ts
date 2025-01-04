@@ -96,20 +96,7 @@ export class HotelListService {
   }
 
   //no implementado
-  reservarHotel(hotelId:string){
-    if (!this.accessToken) { 
-      throw new Error('Access token is not set'); 
-    } 
-    const headers = new HttpHeaders({ 
-      'Authorization': `Bearer ${this.accessToken}` 
-    }); 
-
-    const url = `${this.hotelBookingUrl}?hotelIds=${hotelId}`;
-    return this.http.post(url, {headers}).pipe(
-      catchError ((error) =>{
-        return throwError(() => new Error(error.message || 'Server error')); 
-      })
-    );
+  reservarHotel(){
   }
 
   setAccessToken(token: string) {

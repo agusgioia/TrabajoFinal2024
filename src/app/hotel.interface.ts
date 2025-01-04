@@ -1,84 +1,81 @@
 export interface HotelArray{
-  data:HotelOffer[];
+  data: HotelOffer[];
 }
 
 export interface HotelOffer {
-    available: boolean;
-    hotel: HotelDetails;
-    offers: Offer[];
-  }
-  
-  export interface HotelDetails {
-    chainCode: string;
-    cityCode: string;
-    dupeId: string;
-    hotelId: string;
-    latitude: number;
-    longitude: number;
-    name: string;
-    type: string;
-  }
-  
-  export interface Offer {
-    checkInDate: string;
-    checkOutDate: string;
-    guests: Guests;
-    id: string;
-    policies: Policies;
-    paymentType: string;
-    price: Price;
-    rateCode: string;
-    room: Room;
-    self: string;
-  }
-  
-  export interface Guests {
-    adults: number;
-  }
-  
-  export interface Policies {
-    cancellations: Cancellation[];
-  }
-  
-  export interface Cancellation {
-    deadline: Description;
-    amount: number;
-  }
-  
-  export interface Description {
-    text: string;
-  }
-  
-  export interface Price {
-    base: string;
-    currency: string;
-    total: string;
-    variations: Variations;
-  }
-  
-  export interface Variations {
-    average: AveragePrice;
-    changes: PriceChange[];
-  }
-  
-  export interface AveragePrice {
-    base: string;
-  }
-  
-  export interface PriceChange {
-    base: string;
-    startDate: string;
-    endDate: string;
-  }
-  
-  export interface Room {
-    description: Description;
-    type: string;
-    typeEstimated: TypeEstimated;
-  }
-  
-  export interface TypeEstimated {
-    bedType: string;
-    beds: number;
-  }
-  
+  hotel:HotelDetails;
+  available: boolean;
+  offers: Offer[];
+}
+
+export interface HotelDetails{
+  name: string;
+  hotelId:string;
+  cityCode: string;
+  latitude: number;
+  longitude: number;
+}
+
+export interface Offer{
+  checkInDate:string;
+  checkOutDate:string;
+  room:RoomDetails;
+  guests:NumberAdults;
+  price:priceOptions;
+  policies:Policies;
+}
+
+export interface RoomDetails{
+  type:string;
+  typeEstimated:TypeEstimated;
+  description:RoomDescription;
+}
+
+export interface TypeEstimated{
+  beds:number;
+  bedType:string;
+}
+
+export interface RoomDescription{
+  text:string;
+}
+
+export interface NumberAdults{
+  adults:number;
+}
+
+export interface priceOptions{
+  currency:string;
+  base:string;
+  total:string;
+  variations:Variations;
+}
+
+export interface Variations{
+  average:Average;
+  changes:Changes[];
+}
+
+export interface Average{
+  base:string;
+}
+
+export interface Changes{
+  startDate:string;
+  endDate:string;
+  total:string;
+}
+
+export interface Policies{
+  cancellations:Cancellations[];
+  paymentType:string;
+}
+
+export interface Cancellations{
+  description:CancellationDescription;
+  type:string;
+}
+
+export interface CancellationDescription{
+  text:string;
+}

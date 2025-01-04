@@ -46,6 +46,15 @@ export class TripsComponent implements OnInit{
 
   }
 
+   
+  
+
+  onDelete(){
+    this.userService.EliminarUsuario(this.authService.currentUserSig()?.id!).subscribe(()=>{
+      this.messageService.add({severity:'success', summary:'Success', detail:'Usuario Eliminado'})
+    });
+  }
+
   redirect(){
     this.router.navigateByUrl('/home');
   }

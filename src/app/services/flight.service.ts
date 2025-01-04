@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { catchError, Observable, switchMap, throwError } from 'rxjs';
 import { HotelListService } from './hotel-list.service';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { FlightOffer } from '../vuelo.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +12,7 @@ export class FlightService {
    private flightOffersSearch = 
    'https://test.api.amadeus.com/v2/shopping/flight-offers'; // iataCodeOrigen, iataCodeDestino, fechaSalida, fechaVuelta(opcional), adultos
    private flightOffersPrice = 
-   'https://test.api.amadeus.com/v1/shopping/flight-offers/pricing'; // No entiendo pero parece que sobreescribe si es necesario los precios de la anterior api para saber el precio final en tiempo real
+   'https://test.api.amadeus.com/v1/shopping/flight-offers/pricing?include=bags&forceClass=false'; // No entiendo pero parece que sobreescribe si es necesario los precios de la anterior api para saber el precio final en tiempo real
    private flightCreateOrders = 
    'https://test.api.amadeus.com/v1/booking/flight-orders'; // crea la orden de compra
 
@@ -33,6 +34,27 @@ export class FlightService {
       );
     }
 
-
+    preciosVuelos(vuelo:FlightOffer):Observable<any>{
+      return this.token.obtenerToken().pipe(
+        switchMap(response => {
+          this.accessToken = response.access_token;
+          const requestBody = {
+            data:{
+              type:"flight-offers-pricing",
+              flightOffers:[vuelo]
+            }
+          };
+          const headers = new HttpHeaders({
+            'Authorization': `Bearer ${this.accessToken}`, 
+            'Content-Type': 'application/json'});
+          let url = `${this.flightOffersPrice}`;
+          return this.http.post(url ,requestBody,{headers});
+        }),
+        catchError((error) => {
+          return throwError(() => new Error(error.message || 'Error del servidor'));
+        })
+      );
+    }
   
+    reservarVuelos(){} //sin implementar
 }

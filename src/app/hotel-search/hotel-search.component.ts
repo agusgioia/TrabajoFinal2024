@@ -1,19 +1,23 @@
 import { Component } from '@angular/core';
 import { HotelListService } from '../services/hotel-list.service';
-import { Observer } from 'rxjs';
-import {  FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {  FormBuilder,FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ToastModule } from 'primeng/toast';
 import { CardModule } from 'primeng/card';
-import { HotelArray, HotelOffer } from '../hotel.interface';
+import { Cancellations, Changes, HotelArray, HotelOffer, Offer } from '../hotel.interface';
 import { ButtonModule } from 'primeng/button';
 import { SharedService } from '../shared/shared.service';
+import { MessageService } from 'primeng/api';
 
 interface HotelLi{
   hotelId:string;
   name:string;
   iataCode:string;
   lastUpdate:string;
+}
+
+interface Data{
+  iataCode:string;
 }
 
 @Component({
@@ -25,73 +29,141 @@ interface HotelLi{
 })
 export class HotelSearchComponent {
 
-  cityName: string = ''; 
-  iataCode: string = ''; 
-  checkInDate: string = ''; 
-  checkOutDate: string = ''; 
-  adults: number = 1; 
-  rooms: number = 1; 
-  hotels: HotelLi[] = [];
-  id: string[] = [];
-  hotelsOffers: HotelArray ={data:[]};
+  cityName!:string;
+  hotelForm!:FormGroup;
+  hotels:HotelLi[] = [];
+  hotelsOffers: HotelArray[]=[];
   dateErrorMessage:string|null=null;
+  
 
-  constructor(private hotelList: HotelListService,private sharedService:SharedService) {}
+  constructor(
+    private hotelList: HotelListService,
+    private sharedService:SharedService,
+    private fb:FormBuilder,
+    private messageService:MessageService) {}
 
-  buscarIataCode(): void {
-    const observer: Observer<any> = {
-      next: (response) => {
-        const cityData = response.data[0];
-        this.iataCode = cityData.iataCode;
-        console.log(this.iataCode);
-        this.hotelList.obtenerHotelesPorCiudad(this.iataCode).subscribe({
-          next:(Response)=> {
-            this.hotels=Response.data;
-            console.log(this.hotels);
-            let i = 0;
-            this.dateErrorMessage = null; 
-            const currentDate = new Date(Date.now()); // Asignar la fecha actual a currentDate 
-            const checkIn = new Date(this.checkInDate);
-             const checkOut = new Date(this.checkOutDate); 
-             if (checkIn < currentDate || checkOut < currentDate) { 
-              this.dateErrorMessage = 'Las fechas de check-in y check-out deben ser iguales o posteriores a la fecha actual.'; 
-              return; 
-            } 
-            if (checkIn > checkOut) { 
-              this.dateErrorMessage = 'La fecha de check-out debe ser posterior a la fecha de check-in.'; 
-              return; 
-            }
-            this.hotels.forEach(hotel => {
-              this.hotelList.obtenerHoteles(hotel.hotelId, this.checkInDate, 
-                this.checkOutDate, this.adults, this.rooms).subscribe({
+  
+ 
+  ngOnInit():void{
+    this.hotelForm = this.fb.group({
+      cityName:['',Validators.required],
+      checkInDate:['',[Validators.required, Validators.pattern(/^\d{4}-\d{2}-\d{2}$/)]],
+      checkOutDate:['',[Validators.required, Validators.pattern(/^\d{4}-\d{2}-\d{2}$/)]],
+      adults:['',[Validators.required, Validators.min(1)]],
+      rooms: ['',[Validators.required, Validators.min(1)]]
+    });
+  }
+
+  onSubmit(){
+    if (this.hotelForm.valid) { 
+      const formValue = this.hotelForm.value;
+      this.cityName = formValue.cityName;
+      this.hotelList.obtenerIataCode(formValue.cityName).subscribe({
+        next:(Response)=>{
+          const cityData:Data = Response.data[0];
+          const iataCode = cityData.iataCode;
+          console.log(iataCode);
+          this.hotelList.obtenerHotelesPorCiudad(iataCode).subscribe({
+            next:(Response)=>{
+              this.hotels = Response.data;
+              console.log(this.hotels);
+              let i = 0;
+              this.dateErrorMessage = null; 
+              const currentDate = new Date(Date.now()); // Asignar la fecha actual a currentDate  
+              if (formValue.checkInDate < currentDate || formValue.checkOutDate < currentDate) { 
+                this.dateErrorMessage = 'Las fechas de check-in y check-out deben ser iguales o posteriores a la fecha actual.'; 
+                return; 
+              } 
+              if (formValue.checkInDate > formValue.checkOutDate) { 
+                this.dateErrorMessage = 'La fecha de check-out debe ser posterior a la fecha de check-in.'; 
+                return; 
+              }
+              this.hotels.forEach(hotel => {
+                this.hotelList.obtenerHoteles(hotel.hotelId,formValue.checkInDate,
+                formValue.checkOutDate,formValue.adults,formValue.rooms).subscribe({
                   next:(Response)=>{
-                      this.hotelsOffers=Response;
-                      console.log(Response);
+                    this.hotelsOffers!.push(Response);
                   }
-                })
-              
-            });
-          },
-          error:(err) => {
-            console.error(err);
-          },
-          complete: () => { 
-            console.log('Hotel list retrieve complete'); 
-          }
-        });
-      },
-      error: (err) => { 
-        console.error(err); 
-      }, 
-      complete: () => { 
-        console.log('IATA code retrieval complete'); 
-      }
-    }; 
-    this.hotelList.obtenerIataCode(this.cityName).subscribe(observer);
+                });
+              });
+              console.log(this.hotelsOffers);
+            },
+            error:(err) => {
+              console.error(err);
+            },
+            complete: () => { 
+              console.log('Hotel list retrieve complete'); 
+            }
+          });        
+        }
+      });
+    } 
   }
+  
 
-  onSubmit(Alojamiento:HotelOffer){
-    this.sharedService.setAlojamiento(Alojamiento);
+  onGuardar(Alojamiento: HotelArray) {
+    const alojamientoSimplificado: HotelArray = {
+      data: Array.isArray(Alojamiento.data)
+        ? Alojamiento.data.map((hotelOffer: HotelOffer) => ({
+            available: hotelOffer.available,
+            hotel: {
+              name: hotelOffer.hotel?.name || '',
+              hotelId: hotelOffer.hotel?.hotelId || '',
+              cityCode: hotelOffer.hotel?.cityCode || '',
+              latitude: hotelOffer.hotel?.latitude,
+              longitude: hotelOffer.hotel?.longitude,
+            },
+            offers: Array.isArray(hotelOffer.offers)
+              ? hotelOffer.offers.map((offer: Offer) => ({
+                  checkInDate: offer?.checkInDate || '',
+                  checkOutDate: offer?.checkOutDate || '',
+                  room: {
+                    type: offer.room?.type || '',
+                    typeEstimated: offer.room?.typeEstimated || '',
+                    description: offer.room?.description || '',
+                  },
+                  guests: {
+                    adults: offer.guests?.adults || 0,
+                  },
+                  price: {
+                    currency: offer.price?.currency || '',
+                    base: offer.price?.base || '',
+                    total: offer.price?.total || '',
+                    variations: {
+                      average: {
+                        base: offer.price?.variations?.average?.base || '',
+                      },
+                      changes: Array.isArray(offer.price)
+                      ? offer.price.map((Change:Changes)=>({
+                        startDate:Change.startDate || '',
+                        endDate:Change.endDate || '',
+                        total:Change.total || ''
+                      }))
+                      : []
+                    },
+                  },
+                  policies:{
+                    cancellations: Array.isArray(offer.policies.cancellations) 
+                    ?offer.policies.cancellations.map((cancellation:Cancellations)=>({
+                      description:{text:cancellation.description.text},
+                      type:cancellation.type  
+                    }))
+                    : [],
+                    paymentType: offer.policies?.paymentType || '',
+                  },
+                }))
+              : [],
+          }))
+        : [],
+    };
+  
+    this.sharedService.setHotelData(alojamientoSimplificado);
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Reservado',
+      detail: 'Alojamiento guardado',
+    });
   }
+  
 
 }

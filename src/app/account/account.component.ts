@@ -75,7 +75,6 @@ export class AccountComponent implements OnInit{
           summary:'Guardado',
           detail:'Usuario actualizado correctamente',
         });
-        this.router.navigateByUrl('/');
       },
       error:()=>{
         this.messageService.add({

@@ -1,4 +1,4 @@
-import { HotelOffer } from "./hotel.interface";
+import { HotelArray } from "./hotel.interface";
 import { FlightOffer } from "./vuelo.interface";
 
 export interface Usuario{
@@ -8,10 +8,10 @@ export interface Usuario{
     genero?:string;
     edad?:number;
     presupuesto?:number;
-    Viajes:Viajes[] | null;
+    viajes:Viajes[] | null;
 }
 
 export interface Viajes{
-    Transporte:FlightOffer | null;
-    Alojamiento:HotelOffer | null;
-  }
+    vuelo:FlightOffer | null;
+    alojamiento:HotelArray | null;
+}

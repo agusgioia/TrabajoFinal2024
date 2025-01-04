@@ -1,22 +1,29 @@
 import { Injectable } from '@angular/core';
-import { Viajes } from '../usuario.interface';
+import {  HotelArray } from '../hotel.interface'; // Asegúrate de importar los tipos correctos
+import { FlightOffer } from '../vuelo.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SharedService {
-  private viajes: Viajes[] = [];
-  private i:number = 0;
-  setVuelo(value: any) {
-    this.viajes[this.i].Transporte = value;
+  private viaje: { vuelo: FlightOffer | null; alojamiento: HotelArray | null } = {
+    vuelo: null,
+    alojamiento: null
+  };
+
+  setFlightData(flightData: FlightOffer | null) {
+    this.viaje.vuelo = flightData;
   }
 
-  setAlojamiento(value: any) {
-    this.viajes[this.i].Alojamiento = value;
+  setHotelData(hotelData: HotelArray | null) {
+    this.viaje.alojamiento = hotelData;
   }
 
-  getViaje(): Viajes[] {
-    this.i++;
-    return this.viajes;
+  getViaje() {
+    return this.viaje;
+  }
+
+  clearData() {
+    this.viaje = { vuelo: null, alojamiento: null };
   }
 }

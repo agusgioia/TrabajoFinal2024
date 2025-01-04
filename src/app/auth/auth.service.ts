@@ -40,7 +40,7 @@ export class AuthService {
         edad:18,
         presupuesto:0,
         genero:'',
-        Viajes:null
+        viajes:null
       };
       console.log(response.user.uid);
       this.userService.NuevoUsuario(newUser).subscribe(()=>{
