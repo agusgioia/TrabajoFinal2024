@@ -34,10 +34,12 @@ export class UsuarioService {
   }
 
   public EliminarUsuario(id:string){
-    return this.http.delete(`${this.url}/${id}/$borrar/`);
+    return this.http.delete(`${this.url}/${id}/borrar/`);
   }
 
 
-  
+  public EliminarViaje(id:string,idViaje:number|null){
+    return this.http.delete(`${this.url}/${id}/borrarViaje/${idViaje}`);
+  }
 
 }

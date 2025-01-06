@@ -12,6 +12,7 @@ export interface Usuario{
 }
 
 export interface Viajes{
+    idViaje:number|null;
     vuelo:FlightOffer | null;
     alojamiento:HotelArray | null;
 }

@@ -34,6 +34,7 @@ export class HomeComponent {
         if (!updatedTrips){
           updatedTrips = [];
         }
+        viaje.idViaje = updatedTrips.length;
         updatedTrips!.push(viaje);
         console.log("viajes después del cambio: ",updatedTrips);
         this.userService.PatchUsuario(this.authService.currentUserSig()!.id, {viajes:updatedTrips}).subscribe({

@@ -34,10 +34,12 @@ export interface RoomDetails{
 export interface TypeEstimated{
   beds:number;
   bedType:string;
+  category:string;
 }
 
 export interface RoomDescription{
   text:string;
+  lang:string;
 }
 
 export interface NumberAdults{

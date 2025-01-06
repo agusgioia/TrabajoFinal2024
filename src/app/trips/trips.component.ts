@@ -46,13 +46,11 @@ export class TripsComponent implements OnInit{
 
   }
 
-   
+   //onEdit(){}
   
 
-  onDelete(){
-    this.userService.EliminarUsuario(this.authService.currentUserSig()?.id!).subscribe(()=>{
-      this.messageService.add({severity:'success', summary:'Success', detail:'Usuario Eliminado'})
-    });
+  onDelete(idViaje:number|null){
+    this.userService.EliminarViaje(this.authService.currentUserSig()?.id!,idViaje).subscribe();
   }
 
   redirect(){

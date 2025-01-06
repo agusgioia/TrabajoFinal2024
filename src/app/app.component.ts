@@ -1,7 +1,6 @@
-import { Component, OnInit  } from '@angular/core';
+import { Component  } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { FooterComponent } from "./footer/footer.component";
-import { AuthService, usuarioInt } from './auth/auth.service';
 import { CommonModule } from '@angular/common';
 
 @Component({
@@ -11,15 +10,9 @@ import { CommonModule } from '@angular/common';
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent implements OnInit{
+export class AppComponent{
   title = 'personalizatuviaje';
 
-  currentUser:usuarioInt|null|undefined;
-
-  constructor(private authService:AuthService){}
-
-  ngOnInit(): void {
-    this.currentUser = this.authService.currentUserSig();
-  }
+  
 
 }

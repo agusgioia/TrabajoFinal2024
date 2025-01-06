@@ -97,9 +97,10 @@
               
               <h4>Room</h4>
                 <p>Type: {{ hotelOffer.room.type }}</p>
-                <p>Description: {{ hotelOffer.room.description.text }}</p>
+                <p>Description({{hotelOffer.room.description.lang}}): {{ hotelOffer.room.description.text }}</p>
                 <p>Bed Type: {{ hotelOffer.room.typeEstimated.bedType }}</p>
                 <p>Number of beds: {{hotelOffer.room.typeEstimated.beds}}</p>
+                <p>Category: {{hotelOffer.room.typeEstimated.category}}</p>
           
               <h4>cancellationPolicy:</h4>
               <div *ngFor="let cancellation of hotelOffer.policies.cancellations">

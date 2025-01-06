@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
-import {  HotelArray } from '../hotel.interface'; // Asegúrate de importar los tipos correctos
+import {  HotelArray } from '../hotel.interface'; 
 import { FlightOffer } from '../vuelo.interface';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SharedService {
-  private viaje: { vuelo: FlightOffer | null; alojamiento: HotelArray | null } = {
+  private viaje: {idViaje:number | null; vuelo: FlightOffer | null; alojamiento: HotelArray | null } = {
+    idViaje:null,
     vuelo: null,
     alojamiento: null
   };
@@ -24,6 +25,6 @@ export class SharedService {
   }
 
   clearData() {
-    this.viaje = { vuelo: null, alojamiento: null };
+    this.viaje = { idViaje:null,vuelo: null, alojamiento: null };
   }
 }
