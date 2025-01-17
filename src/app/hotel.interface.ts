@@ -65,19 +65,38 @@ export interface Average{
 export interface Changes{
   startDate:string;
   endDate:string;
-  total:string;
+  base:string;
 }
 
 export interface Policies{
   cancellations:Cancellations[];
   paymentType:string;
+
+  guarantee:Guarantee | null;
+}
+
+export interface Guarantee{
+  acceptedPayments:PaymentType | null;
+}
+
+export interface PaymentType{
+  creditCardPolicies:CardPolicies[] | null;
+  creditCards:string[] | null;
+  methods:string[] | null;
+}
+
+export interface CardPolicies{
+  vendorCode:string | null;
 }
 
 export interface Cancellations{
-  description:CancellationDescription;
-  type:string;
+  description:CancellationDescription | null;
+  type:string | null;
+  amount:string | null;
+  deadline:string |null;
+  numberOfNights:number | null;
 }
 
 export interface CancellationDescription{
-  text:string;
+  text:string | null;
 }

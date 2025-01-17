@@ -61,6 +61,8 @@
       </div>
     </div> -->
 
+  </p-card>  
+    
     <div *ngIf="hotelsOffers || hotelsOffers!=[]">
 
       <p-card 
@@ -87,10 +89,10 @@
               <p>Base: {{ hotelOffer.price.base }} {{ hotelOffer.price.currency }}</p>
 
               <h6>Variations</h6>
-              <p>Average base: {{hotelOffer.price.variations.average.base}}</p>
+              <p>Average total: {{hotelOffer.price.variations.average.base}}</p>
               <p>Changes</p>
               <div *ngFor="let changes of hotelOffer.price.variations.changes">
-                <p>total: {{changes.total}}</p>
+                <p>base: {{changes.base}}</p>
                 <p>startDate: {{changes.startDate}}</p>
                 <p>endDate: {{changes.endDate}}</p>
               </div>
@@ -100,13 +102,38 @@
                 <p>Description({{hotelOffer.room.description.lang}}): {{ hotelOffer.room.description.text }}</p>
                 <p>Bed Type: {{ hotelOffer.room.typeEstimated.bedType }}</p>
                 <p>Number of beds: {{hotelOffer.room.typeEstimated.beds}}</p>
+              <div *ngIf="hotelOffer.room.typeEstimated.category"> 
                 <p>Category: {{hotelOffer.room.typeEstimated.category}}</p>
-          
+              </div> 
+
+                
               <h4>cancellationPolicy:</h4>
               <div *ngFor="let cancellation of hotelOffer.policies.cancellations">
-                <p>Description: {{cancellation.description.text}}</p>
+                <div *ngIf="cancellation.description">
+                  <p>Description: {{cancellation.description.text}}</p>
+                </div>
                 <p>Type: {{cancellation.type}}</p>
               </div>
+              
+              <div *ngIf="hotelOffer.policies.guarantee">
+
+                <div *ngIf="hotelOffer.policies.guarantee.acceptedPayments">
+                  
+                  <div *ngFor="let cardPolicies of hotelOffer.policies.guarantee.acceptedPayments.creditCardPolicies">
+                    <p>vendorCode:{{cardPolicies.vendorCode}}</p>
+                  </div>
+                
+                  <h6>Credit Cards</h6>
+                  <div *ngFor="let card of hotelOffer.policies.guarantee.acceptedPayments.creditCards">  
+                    <p>{{card}}</p>
+                  </div>
+                
+                  <div *ngFor="let method of hotelOffer.policies.guarantee.acceptedPayments.methods">
+                   <p>methods:{{method}}</p>
+                  </div>
+
+                </div>
+              </div>    
             </div>  
           </div >
         </ng-template>
@@ -117,5 +144,5 @@
         
       </p-card>
     </div>
-  </p-card>
+  
 </div>

@@ -28,16 +28,13 @@ export class AccountComponent implements OnInit{
     private userService:UsuarioService,
     private fu:FormBuilder,
     private messageService:MessageService,
-    private router:Router,
     private authService:AuthService){
       this.formUser = this.fu.group({
-        id:[''],
         email:['',Validators.required],
         nombreUsuario:['',Validators.required],
         genero:['',Validators.required],
         edad:[18,[Validators.required,Validators.min(18)]],
-        presupuesto:[0,[Validators.required,Validators.min(0)]],
-        Viajes:[''],
+        presupuesto:[0,[Validators.required,Validators.min(0)]]
       })
   }
 
@@ -68,7 +65,17 @@ export class AccountComponent implements OnInit{
       });
       return;
     }
-    this.userService.EditarUsuario(this.formUser.value,this.authService.currentUserSig()?.id!).subscribe({
+    const rawForm = this.formUser.getRawValue();
+    this.usuario = {
+      id:'',
+      email:rawForm.email,
+      nombreUsuario:rawForm.nombreUsuario,
+      edad:rawForm.edad,
+      genero:rawForm.genero,
+      presupuesto:rawForm.presupuesto,
+      viajes:this.usuario.viajes
+    }
+    this.userService.EditarUsuario(this.usuario,this.authService.currentUserSig()?.id!).subscribe({
       next:()=>{
         this.messageService.add({
           severity:'success',

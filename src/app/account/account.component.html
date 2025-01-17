@@ -27,6 +27,12 @@
                 <label for="presupuesto">Presupuesto</label>
                 <p-inputNumber inputId="integeronly" formControlName="presupuesto"/>
             </div>
+            <div *ngIf="usuario.viajes">
+                <p>Viajes Activos</p>
+                <div *ngFor="let viaje of usuario.viajes">
+                    <p>{{viaje.idViaje}}</p> <p>{{viaje.alojamiento|json}}</p> <p>{{viaje.vuelo|json}}</p> 
+                </div>
+            </div>
             <div class="flex">
                 <p-button label="Guardar" type="submit"></p-button>
             </div>

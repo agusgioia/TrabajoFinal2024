@@ -64,7 +64,7 @@
         <div *ngFor="let segment of itinerary.segments">
           <p>Carrier: {{ segment.carrierCode }}</p>
           <p>Flight Number: {{ segment.number }}</p>
-          <p>Aircraft: {{ segment.aircraft }}</p>
+          <p>Aircraft: {{ segment.aircraft.code }}</p>
           <p>Departure: {{ segment.departure.iataCode }} at {{ segment.departure.at }} </p>
           <p>Arrival: {{ segment.arrival.iataCode }} at {{ segment.arrival.at }} </p>
           <p>Duration: {{ segment.duration }}</p>

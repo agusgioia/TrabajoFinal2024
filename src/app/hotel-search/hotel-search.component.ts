@@ -4,7 +4,7 @@ import {  FormBuilder,FormGroup, FormsModule, ReactiveFormsModule, Validators } 
 import { CommonModule } from '@angular/common';
 import { ToastModule } from 'primeng/toast';
 import { CardModule } from 'primeng/card';
-import { Cancellations, Changes, HotelArray, HotelOffer, Offer } from '../hotel.interface';
+import { Cancellations, Changes, HotelArray, HotelOffer, Offer, CardPolicies } from '../hotel.interface';
 import { ButtonModule } from 'primeng/button';
 import { SharedService } from '../shared/shared.service';
 import { MessageService } from 'primeng/api';
@@ -137,7 +137,7 @@ export class HotelSearchComponent {
                       ? offer.price.map((Change:Changes)=>({
                         startDate:Change.startDate || '',
                         endDate:Change.endDate || '',
-                        total:Change.total || ''
+                        base:Change.base || ''
                       }))
                       : []
                     },
@@ -145,11 +145,31 @@ export class HotelSearchComponent {
                   policies:{
                     cancellations: Array.isArray(offer.policies.cancellations) 
                     ?offer.policies.cancellations.map((cancellation:Cancellations)=>({
-                      description:{text:cancellation.description.text},
-                      type:cancellation.type  
+                      description:{
+                        text:cancellation.description?.text || null
+                      },
+                      type:cancellation.type || null,
+                      amount:cancellation.amount ||null,
+                      deadline:cancellation.deadline ||null,
+                      numberOfNights:cancellation.numberOfNights || null
                     }))
                     : [],
                     paymentType: offer.policies?.paymentType || '',
+                    guarantee:{
+                      acceptedPayments:{
+                        creditCardPolicies:Array.isArray(offer.policies.guarantee?.acceptedPayments?.creditCardPolicies)
+                        ?offer.policies.guarantee?.acceptedPayments?.creditCardPolicies.map((cardPolicies:CardPolicies)=>({
+                          vendorCode:cardPolicies.vendorCode || '' ||null
+                        }))
+                        : [],
+                        creditCards: Array.isArray(offer.policies.guarantee?.acceptedPayments?.creditCards)
+                        ? offer.policies.guarantee?.acceptedPayments?.creditCards.map((card: string) => card || '')
+                        : [],
+                        methods:Array.isArray(offer.policies.guarantee?.acceptedPayments?.methods)
+                        ?offer.policies.guarantee?.acceptedPayments?.methods.map((method:string)=>method || '')
+                        : []
+                      }
+                    }
                   },
                 }))
               : [],

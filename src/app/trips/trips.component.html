@@ -1,3 +1,4 @@
+<p-toast></p-toast>
 <app-header></app-header>
 <h2>Lista de Viajes</h2>
 @if (usuario.viajes!=null){
@@ -16,7 +17,7 @@
                 <p-button label="Edit" class="w-full" styleClass="w-full" ></p-button>
             </div>
             <div class="flex gap-3 mt-1">
-                <p-button label="Delete" class="w-full" styleClass="w-full  p-button-danger" (click)="onDelete(viaje.idViaje)" ></p-button>
+                <button type="button" (click)="onDelete(viaje.idViaje)">Delete</button>
             </div>
             </ng-template>
         </p-card>

@@ -8,13 +8,14 @@ import { AuthService } from '../auth/auth.service';
 import { HeaderComponent } from "../header/header.component";
 import { Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
 
 
 
 @Component({
   selector: 'app-trips',
   standalone: true,
-  imports: [ButtonModule, CardModule, CommonModule, HeaderComponent],
+  imports: [ButtonModule, CardModule, CommonModule, HeaderComponent,ToastModule],
   templateUrl: './trips.component.html',
   styleUrl: './trips.component.css'
 })
@@ -50,7 +51,12 @@ export class TripsComponent implements OnInit{
   
 
   onDelete(idViaje:number|null){
-    this.userService.EliminarViaje(this.authService.currentUserSig()?.id!,idViaje).subscribe();
+    this.userService.EliminarViaje(this.authService.currentUserSig()?.id!,idViaje).subscribe({
+      next:()=>{this.messageService.add({severity:'success',summary:'Success',detail:'Viaje borrado'})},
+      error:(err) => {
+        console.error(err);
+      }
+    });
   }
 
   redirect(){
