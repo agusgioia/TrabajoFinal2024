@@ -8,11 +8,12 @@ import { SharedService } from '../shared/shared.service';
 import { UsuarioService } from '../services/usuario.service';
 import { AuthService } from '../auth/auth.service';
 import { MessageService } from 'primeng/api';
+import { SharedComponent } from "../shared/shared/shared.component";
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, FormsModule, FlightSearchComponent, HotelSearchComponent, HeaderComponent],
+  imports: [CommonModule, FormsModule, FlightSearchComponent, HotelSearchComponent, HeaderComponent, SharedComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
@@ -23,6 +24,8 @@ export class HomeComponent {
     private authService:AuthService,
     private userService:UsuarioService,
     private messageService:MessageService){}
+
+  
 
   AgregarViaje(){
     const viaje = this.sharedService.getViaje();
