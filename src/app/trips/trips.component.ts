@@ -12,12 +12,13 @@ import { ToastModule } from 'primeng/toast';
 import { PanelModule } from 'primeng/panel';
 import { AvatarModule } from 'primeng/avatar';
 import { MenuModule } from 'primeng/menu';
+import { IconFieldModule } from 'primeng/iconfield';
 
 @Component({
   selector: 'app-trips',
   standalone: true,
   imports: [ButtonModule, CardModule, CommonModule, 
-    HeaderComponent,ToastModule,AvatarModule,PanelModule,MenuModule],
+    HeaderComponent,ToastModule,AvatarModule,PanelModule,MenuModule,IconFieldModule],
   templateUrl: './trips.component.html',
   styleUrl: './trips.component.css'
 })
