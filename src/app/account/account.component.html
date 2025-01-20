@@ -28,9 +28,49 @@
                 <p-inputNumber inputId="integeronly" formControlName="presupuesto"/>
             </div>
             <div *ngIf="usuario.viajes">
-                <p>Viajes Activos</p>
+                <p>Número de Viajes Activos: {{usuario.viajes.length}}</p>
                 <div *ngFor="let viaje of usuario.viajes">
-                    <p>{{viaje.idViaje}}</p> <p>{{viaje.alojamiento|json}}</p> <p>{{viaje.vuelo|json}}</p> 
+                    
+                    <h4>Viaje Nº{{viaje.idViaje}}</h4> 
+                    
+                    <div>
+                        <h4>Vuelo</h4>
+
+                        <div *ngFor="let itinerarie of viaje.vuelo?.itineraries">
+                            <div *ngFor="let segment of itinerarie.segments">
+                                <p>Número de Vuelo:{{segment.number}}</p>
+                                <p>Vuelo desde: {{segment.departure.iataCode}}</p>
+                                <p>Hasta: {{segment.arrival.iataCode}}</p>
+                                <p>Horario de salida: {{segment.departure.at}}</p>
+                                <p>Horario de llegada: {{segment.arrival.at}}</p>
+                            </div>
+                            <p>Aerolinea: {{viaje.vuelo?.validatingAirlineCodes}}</p>
+                            <div *ngFor="let traveler of viaje.vuelo?.travelerPricings">
+                                <p>Cabina: {{traveler.cabin}}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div>
+                        <h4>Alojamiento</h4>
+
+                        <div *ngFor="let hotel of viaje.alojamiento?.data">
+                            <p>Nombre del hotel: {{hotel.hotel.name}}</p>
+                            <p>Ciudad: {{hotel.hotel.cityCode}}</p>
+                            <div *ngFor="let oferta of hotel.offers">
+                                <p>Horario de entrada: {{oferta.checkInDate}}</p>
+                                <p>Horario de Salida: {{oferta.checkOutDate}}</p>
+                                <p>Cantidad de huéspedes: {{oferta.guests.adults}}</p>
+                                <h6>Habitación</h6>
+                                <p>Tipo de Habitación: {{oferta.room.type}}</p>
+                                <p>Descripción de la habitación: {{oferta.room.description.text}}</p>
+                                <p>Tipo de cama: {{oferta.room.typeEstimated.bedType}}</p>
+                                <p>Número de camas: {{oferta.room.typeEstimated.beds}}</p>
+                                <p>Categoría:{{oferta.room.typeEstimated.category}}</p>
+                            </div>
+                        </div>
+                    </div>
+        
                 </div>
             </div>
             <div class="flex">
