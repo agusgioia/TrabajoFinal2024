@@ -31,7 +31,7 @@
                 <p>Número de Viajes Activos: {{usuario.viajes.length}}</p>
                 <div *ngFor="let viaje of usuario.viajes">
                     
-                    <h4>Viaje Nº{{viaje.idViaje}}</h4> 
+                    <h4>Viaje Nº{{viaje.idViaje!+1}}</h4> 
                     
                     <div>
                         <h4>Vuelo</h4>
