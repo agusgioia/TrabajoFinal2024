@@ -3,7 +3,7 @@
 <h2>Lista de Viajes</h2>
 @if (usuario.viajes!=null){
     <div *ngFor="let viaje of usuario.viajes">
-        <p-card header="Viaje">
+        <p-card header="Viaje" [style]="{ width: '400px' }">
             <ng-template pTemplate="header">
                 <img alt="Card" src="https://primefaces.org/cdn/primeng/images/card-ng.jpg" />
             </ng-template>

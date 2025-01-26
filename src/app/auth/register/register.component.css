@@ -1,0 +1,9 @@
+.header{
+    background-color: cadetblue;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.card{
+    border-color: cadetblue;
+    border-width: 2px;
+}
