@@ -9,6 +9,7 @@ import { UsuarioService } from '../services/usuario.service';
 import { AuthService } from '../auth/auth.service';
 import { MessageService } from 'primeng/api';
 import { SharedComponent } from "../shared/shared/shared.component";
+import { Viajes } from '../usuario.interface';
 
 @Component({
   selector: 'app-home',
@@ -19,6 +20,8 @@ import { SharedComponent } from "../shared/shared/shared.component";
 })
 export class HomeComponent {
 
+  viaje:Viajes|null =null;
+
   constructor(
     private sharedService:SharedService,
     private authService:AuthService,
@@ -28,8 +31,8 @@ export class HomeComponent {
   
 
   AgregarViaje(){
-    const viaje = this.sharedService.getViaje();
-    console.log("Viaje a guardar: ",viaje);
+    this.viaje = this.sharedService.getViaje();
+    console.log("Viaje a guardar: ",this.viaje);
     this.userService.getUserById(this.authService.currentUserSig()!.id).subscribe({
       next:(Response)=>{
         let updatedTrips = Response.viajes;
@@ -37,8 +40,8 @@ export class HomeComponent {
         if (!updatedTrips){
           updatedTrips = [];
         }
-        viaje.idViaje = updatedTrips.length;
-        updatedTrips!.push(viaje);
+        this.viaje!.idViaje = updatedTrips.length;
+        updatedTrips!.push(this.viaje!);
         console.log("viajes después del cambio: ",updatedTrips);
         this.userService.PatchUsuario(this.authService.currentUserSig()!.id, {viajes:updatedTrips}).subscribe({
           next:() => { 

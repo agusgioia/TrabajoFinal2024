@@ -14,20 +14,20 @@ export interface SimplifiedItinerary {
 }
 
 export interface SimplifiedSegment {
-  aircraft: AircraftCode; // Aircraft code
+  aircraft: AircraftCode; 
   departure: SimplifiedLocationInfo;
   arrival: SimplifiedLocationInfo;
   duration: string;
   carrierCode: string;
-  number: string; // Flight number
+  number: string; 
 }
 export interface AircraftCode{
   code:string;
 }
 
 export interface SimplifiedLocationInfo {
-  at: string; // Date and time
-  iataCode: string; // Airport code
+  at: string; 
+  iataCode: string; 
 }
 
 export interface SimplifiedPrice {
@@ -37,12 +37,23 @@ export interface SimplifiedPrice {
 }
 
 export interface SimplifiedPricingOptions {
-  fareType: string[]; // Types of fares available
+  fareType: string[];
 }
 
 export interface SimplifiedTravelerPricing {
-  cabin: string; // Cabin class (e.g., Economy, Business)
   price: SimplifiedTravelerPrice;
+  fareDetailsBySegment:FareDetails[]; 
+}
+
+export interface FareDetails{ 
+  amenities:AmenitiesDetails[];
+  cabin:string;
+}
+
+export interface AmenitiesDetails{ 
+  description:string;
+  amenityType:string;
+  isChargeable:boolean;
 }
 
 export interface SimplifiedTravelerPrice {

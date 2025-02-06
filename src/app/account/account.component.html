@@ -46,7 +46,17 @@
                             </div>
                             <p>Aerolinea: {{viaje.vuelo?.validatingAirlineCodes}}</p>
                             <div *ngFor="let traveler of viaje.vuelo?.travelerPricings">
-                                <p>Cabina: {{traveler.cabin}}</p>
+                                <div *ngFor="let fare of traveler.fareDetailsBySegment">
+                                    <p>Cabina:{{fare.cabin}}</p>
+                                    
+                                    <div *ngFor="let amenities of fare.amenities">
+                                        <p>description:{{amenities.description}}</p>
+                                        <p>Type: {{amenities.amenityType}}</p>
+                                        <p>isChargeable: {{amenities.isChargeable}}</p>
+                                    </div>
+
+                                </div>
+                                
                             </div>
                         </div>
                     </div>
@@ -74,7 +84,7 @@
                 </div>
             </div>
             <div class="flex">
-                <p-button label="Guardar" type="submit"></p-button>
+                <button type="submit" class="btn-primary">Guardar</button>
             </div>
         </form>
     </p-card>

@@ -8,16 +8,67 @@
                 <img alt="Card" src="https://primefaces.org/cdn/primeng/images/card-ng.jpg" />
             </ng-template>
             <ng-template pTemplate="content">
-                <p>Vuelo:{{viaje.vuelo|json}}</p>
-                <p>Alojamiento: {{viaje.alojamiento|json}}</p>
+                <div *ngFor="let viaje of usuario.viajes">
+                    <h5>Vuelo</h5>
+                    <p>Aerolinea:{{viaje.vuelo?.validatingAirlineCodes}}</p>
+                    
+                    <div *ngFor="let itinerarie of viaje.vuelo?.itineraries">
+                        
+                        <div *ngFor="let segment of itinerarie.segments">
+                            <p>Hora de salida:{{segment.departure.at}}</p>
+                            <p>Origen:{{segment.departure.iataCode}}</p>
+
+                            <p>Hora de llegada:{{segment.arrival.at}}</p>
+                            <p>Destino: {{segment.arrival.iataCode}}</p>
+
+                            <p>Numero de vuelo:{{segment.number}}</p>
+                            <p>Avión: {{segment.aircraft.code}}</p>
+                            
+                        </div>
+                    </div>
+
+                    <div *ngFor="let traveler of viaje.vuelo?.travelerPricings">
+                        <h6>Servicios Provistos</h6>
+                        <div *ngFor="let fare of traveler.fareDetailsBySegment">
+                            <p>Cabina: {{fare.cabin}}</p>
+                            <div *ngFor="let amenitie of fare.amenities">
+                                <p>Tipo de servicio: {{amenitie.amenityType}}</p>
+                                <p>Descripción: {{amenitie.description}}</p>
+                                <p>Con Cargo?:{{amenitie.isChargeable}}</p>
+                            </div>
+                        </div>
+                        <p></p>
+                    </div>
+                    <p>Alojamiento:</p>
+                    <div *ngFor="let hotel of viaje.alojamiento?.data">
+                        <p>Nombre del hotel:{{hotel.hotel.name}}</p>
+                        <p>Longitud:{{hotel.hotel.longitude}}</p>
+                        <p>Latitud:{{hotel.hotel.latitude}}</p>
+                        <div *ngFor="let offers of hotel.offers">
+                            <p>Fecha de Entrada:{{offers.checkInDate}}</p>
+                            <p>Fecha de Salida:{{offers.checkOutDate}}</p>
+                            <p>Número de huéspedes:{{offers.guests.adults}}</p>
+                            <h6>Habitación</h6>
+                            <p>Tipo de habitación:{{offers.room.type}}</p>
+                            <p>Tipo estimado:{{offers.room.typeEstimated}}</p>
+                            <p>Descripción: {{offers.room.description.text}}</p>
+                            <h6>Politicas de cancelación</h6>
+                            <div *ngFor="let policies of offers.policies.cancellations">
+                                <p>Precio a Pagar:{{policies.amount}}</p>
+                                <p>Fecha limite de cancelación:{{policies.deadline}}</p>
+                                <p>Número de noches:{{policies.numberOfNights}}</p>
+                                <p>tipo de politica:{{policies.type}}</p>
+                                <p>Descripcion:{{policies.description}}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
             </ng-template>
             
             <ng-template pTemplate="footer">
             <div class="flex gap-3 mt-1">
-                <p-button label="Edit" class="w-full" styleClass="w-full" ></p-button>
-            </div>
-            <div class="flex gap-3 mt-1">
-                <button type="button" (click)="onDelete(viaje.idViaje)">Delete</button>
+                <button type="button" class="primary w-10" (click)="onDelete(viaje.idViaje)">Delete</button>
             </div>
             </ng-template>
         </p-card>
@@ -26,31 +77,5 @@
 @if(usuario.viajes==null){
     <button type="button" class="btn btn-primary" (click)="redirect()">NuevoViaje</button>
 }
-<p-panel [toggleable]="true">
-    <ng-template pTemplate="header">
-        <div class="flex items-center gap-2">
-            <p-avatar image="https://primefaces.org/cdn/primevue/images/avatar/amyelsner.png" shape="circle" />
-            <span class="font-bold">Amy Elsner</span>
-        </div>
-    </ng-template>
-    <ng-template pTemplate="footer">
-        <div class="flex flex-wrap items-center justify-between gap-4">
-            <div class="flex items-center gap-2">
-                <p-button icon="pi pi-user" rounded text></p-button>
-                <p-button icon="pi pi-bookmark" severity="secondary" rounded text></p-button>
-            </div>
-            <span class="text-surface-500 dark:text-surface-400">Updated 2 hours ago</span>
-        </div>
-    </ng-template>
-    <ng-template pTemplate="icons">
-        <p-button icon="pi pi-cog" severity="secondary" rounded text (click)="menu.toggle($event)" />
-        <p-menu #menu id="config_menu" [model]="items" [popup]="true" />
-    </ng-template>
-    <p class="m-0">
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna
-        aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis
-        aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint
-        occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-    </p>
-</p-panel>
+
 

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FlightService } from '../services/flight.service';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { FlightOffer } from '../vuelo.interface';
+import { AmenitiesDetails, FareDetails, FlightOffer, SimplifiedTravelerPricing } from '../vuelo.interface';
 import { ToastModule } from 'primeng/toast';
 import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
@@ -24,7 +24,8 @@ export class FlightSearchComponent implements OnInit{
   constructor(private fb: FormBuilder, 
     private flightService: FlightService,
     private sharedService:SharedService,
-    private messageService:MessageService) {} 
+    private messageService:MessageService,
+    ) {} 
   
   ngOnInit(): void { 
     this.flightForm = this.fb.group({ 
@@ -57,7 +58,7 @@ export class FlightSearchComponent implements OnInit{
   } 
   
   onGuardar(vuelo:FlightOffer){
-    const vueloSimplificado: FlightOffer = {
+    const vueloSimplificado = {
       id: vuelo.id,
       itineraries: Array.isArray(vuelo.itineraries)
         ? vuelo.itineraries.map((itinerary: any) => ({
@@ -91,8 +92,7 @@ export class FlightSearchComponent implements OnInit{
         fareType: vuelo.pricingOptions?.fareType || [],
       },
       travelerPricings: Array.isArray(vuelo.travelerPricings)
-        ? vuelo.travelerPricings.map((traveler: any) => ({
-            cabin: traveler.cabin || "",
+        ? vuelo.travelerPricings.map((traveler: SimplifiedTravelerPricing) => ({
             price: traveler.price
               ? {
                   base: traveler.price.base || "",
@@ -100,14 +100,26 @@ export class FlightSearchComponent implements OnInit{
                   total: traveler.price.total || "",
                 }
               : { base: "", currency: "", total: "" },
+            fareDetailsBySegment:Array.isArray(traveler.fareDetailsBySegment)
+            ?traveler.fareDetailsBySegment.map((fare:FareDetails) => ({
+              amenities:Array.isArray(fare)
+              ?fare.map((amenities:AmenitiesDetails) =>({
+                description:amenities.description ||"",
+                amenityType:amenities.amenityType ||"",
+                isChargeable:amenities.isChargeable
+              })) :[],
+              cabin:fare.cabin
+            })) : [],
           }))
-        : [],
+        : [],            
       validatingAirlineCodes: vuelo.validatingAirlineCodes || [],
       lastTicketingDate: vuelo.lastTicketingDate || "",
     };    
     this.sharedService.setFlightData(vueloSimplificado);
     this.messageService.add({severity:'success',summary:'Reservado',detail:'Vuelo guardado'});
-    this.flightService.preciosVuelos(vuelo).subscribe((response)=> console.log(response));
+    this.flightService.preciosVuelos(vuelo).subscribe((response)=> {
+      console.log(response);
+    });
   }
   
 }

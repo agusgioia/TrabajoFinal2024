@@ -1,6 +1,6 @@
-<div *ngIf="viaje!null">
+@if(viaje?.vuelo || viaje?.alojamiento){
     <h2>Resumen de Viaje</h2>
-    <p>{{viaje.idViaje}}</p>
-    <p>{{viaje.vuelo|json}}</p>
-    <p>{{viaje.alojamiento|json}}</p>
-</div>
+    <p>{{viaje?.idViaje}}</p>
+    <p>{{viaje?.vuelo|json}}</p>
+    <p>{{viaje?.alojamiento|json}}</p>
+}

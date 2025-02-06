@@ -1,6 +1,6 @@
 <p-toast/>
 <div class="flex justify-content-center align-items-center min-h-screen w-ful">
-  <p-card header="Buscar Ofertas de Vuelos" class="w-10">  
+  <p-card header="Buscar Ofertas de Vuelos" class="w-10 flex justify-content-center align-items-center">  
     <form 
     [formGroup]="flightForm" 
     (ngSubmit)="onSubmit()" 
@@ -84,9 +84,17 @@
         <h3>Traveler Pricing</h3>
         <div *ngFor="let pricing of offer.travelerPricings">
           <p>Traveler Type: Adult</p>
-          <p>Cabin: {{pricing.cabin}}</p>
           <p>Base Price: {{pricing.price.base}} {{ pricing.price.currency }}</p>
           <p>Price: {{ pricing.price.total }} {{ pricing.price.currency }}</p>
+          <div *ngFor="let fare of pricing.fareDetailsBySegment">
+            <p>Cabin: {{fare.cabin}}</p>
+            <p>Amenities</p>
+              <div *ngFor="let amenities of fare.amenities">
+                <p>description:{{amenities.description}}</p>
+                <p>Type: {{amenities.amenityType}}</p>
+                <p>isChargeable: {{amenities.isChargeable}}</p>
+              </div>
+          </div>          
         </div>
       </div>
     </ng-template>
