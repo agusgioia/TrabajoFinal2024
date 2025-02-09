@@ -59,10 +59,9 @@
     
       <div *ngFor="let itinerary of offer.itineraries">
         <h3>Itinerary</h3>
-        <p>Duration: {{ itinerary.duration }}</p>
-        
+        <p>Duration: {{ itinerary.duration }}</p>       
+        <p>Segments:</p> 
         <div *ngFor="let segment of itinerary.segments">
-          <p>Carrier: {{ segment.carrierCode }}</p>
           <p>Flight Number: {{ segment.number }}</p>
           <p>Aircraft: {{ segment.aircraft.code }}</p>
           <p>Departure: {{ segment.departure.iataCode }} at {{ segment.departure.at }} </p>
@@ -75,9 +74,6 @@
         <h3>Price</h3>
         <p>Base: {{ offer.price.base }} {{ offer.price.currency }}</p>
         <p>Grand Total: {{ offer.price.grandTotal }} {{ offer.price.currency }}</p>
-        <div *ngFor="let fare of offer.pricingOptions.fareType">
-          <p>Type of Fare: {{fare}}</p>
-        </div>  
       </div>
       
       <div>

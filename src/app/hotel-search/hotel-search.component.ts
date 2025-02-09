@@ -8,6 +8,7 @@ import { Cancellations, Changes, HotelArray, HotelOffer, Offer, CardPolicies } f
 import { ButtonModule } from 'primeng/button';
 import { SharedService } from '../shared/shared.service';
 import { MessageService } from 'primeng/api';
+import { concatMap, from, tap, throwError } from 'rxjs';
 
 interface HotelLi{
   hotelId:string;
@@ -53,53 +54,53 @@ export class HotelSearchComponent {
       rooms: ['',[Validators.required, Validators.min(1)]]
     });
   }
-
-  onSubmit(){
-    if (this.hotelForm.valid) { 
-      const formValue = this.hotelForm.value;
-      this.cityName = formValue.cityName;
-      this.hotelList.obtenerIataCode(formValue.cityName).subscribe({
-        next:(Response)=>{
-          const cityData:Data = Response.data[0];
-          const iataCode = cityData.iataCode;
-          console.log(iataCode);
-          this.hotelList.obtenerHotelesPorCiudad(iataCode).subscribe({
-            next:(Response)=>{
-              this.hotels = Response.data;
-              console.log(this.hotels);
-              let i = 0;
-              this.dateErrorMessage = null; 
-              const currentDate = new Date(Date.now()); // Asignar la fecha actual a currentDate  
-              if (formValue.checkInDate < currentDate || formValue.checkOutDate < currentDate) { 
-                this.dateErrorMessage = 'Las fechas de check-in y check-out deben ser iguales o posteriores a la fecha actual.'; 
-                return; 
-              } 
-              if (formValue.checkInDate > formValue.checkOutDate) { 
-                this.dateErrorMessage = 'La fecha de check-out debe ser posterior a la fecha de check-in.'; 
-                return; 
-              }
-              this.hotels.forEach(hotel => {
-                this.hotelList.obtenerHoteles(hotel.hotelId,formValue.checkInDate,
-                formValue.checkOutDate,formValue.adults,formValue.rooms).subscribe({
-                  next:(Response)=>{
-                    this.hotelsOffers!.push(Response);
-                  }
-                });
-              });
-              console.log(this.hotelsOffers);
-            },
-            error:(err) => {
-              console.error(err);
-            },
-            complete: () => { 
-              console.log('Hotel list retrieve complete'); 
-            }
-          });        
-        }
-      });
-    } 
-  }
   
+
+    onSubmit() {
+      if (this.hotelForm.valid) {
+        const formValue = this.hotelForm.value;
+        this.cityName = formValue.cityName;
+    
+        this.hotelList.obtenerIataCode(formValue.cityName).pipe(
+          concatMap((Response) => {
+            const cityData: Data = Response.data[0];
+            const iataCode = cityData.iataCode;
+            console.log(iataCode);
+            return this.hotelList.obtenerHotelesPorCiudad(iataCode);
+          }),
+          concatMap((Response) => {
+            this.hotels = Response.data;
+            console.log(this.hotels);
+    
+            this.dateErrorMessage = null;
+            const currentDate = new Date(Date.now());
+    
+            if (formValue.checkInDate < currentDate || formValue.checkOutDate < currentDate) {
+              this.dateErrorMessage = 'Las fechas de check-in y check-out deben ser iguales o posteriores a la fecha actual.';
+              return throwError(() => new Error(this.dateErrorMessage || 'Error de fechas'));
+            }
+            if (formValue.checkInDate > formValue.checkOutDate) {
+              this.dateErrorMessage = 'La fecha de check-out debe ser posterior a la fecha de check-in.';
+              return throwError(() => new Error(this.dateErrorMessage || 'Error de fechas'));
+            }
+    
+            return from(this.hotels).pipe(
+              concatMap((hotel) => 
+                this.hotelList.obtenerHoteles(
+                  hotel.hotelId, formValue.checkInDate, formValue.checkOutDate, formValue.adults, formValue.rooms
+                )
+              ),
+              tap((Response) => this.hotelsOffers!.push(Response))
+            );
+          })
+        ).subscribe({
+          error: (err) => console.error(err),
+          complete: () => console.log('Proceso de obtención de hoteles finalizado')
+        });
+      }
+    }
+    
+
 
   onGuardar(Alojamiento: HotelArray) {
     const alojamientoSimplificado: HotelArray = {
