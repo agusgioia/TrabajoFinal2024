@@ -20,6 +20,20 @@ export class FlightService {
 
     constructor(private token:HotelListService,private http:HttpClient){}
 
+    obtenerAerolinea(codAerolinea:string){
+      return this.token.obtenerToken().pipe(
+        switchMap(response => {
+          this.accessToken = response.access_token;
+          const headers = new HttpHeaders({ 'Authorization': `Bearer ${this.accessToken}` }); 
+          let url = `https://test.api.amadeus.com/v1/reference-data/airlines?airlineCodes=${codAerolinea}`;
+          return this.http.get(url,{headers});
+        }),
+        catchError((error) => { 
+          return throwError(() => new Error(error.message || 'Error del servidor')); 
+        })
+      )
+    }
+    
     listarVuelos(iataOrigin:string,iataDest:string,departureDate:string,returnDate:string,adults:number):Observable<any>{
       return this.token.obtenerToken().pipe( 
         switchMap(response => { 

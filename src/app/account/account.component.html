@@ -29,58 +29,67 @@
             </div>
             <div *ngIf="usuario.viajes">
                 <p>Número de Viajes Activos: {{usuario.viajes.length}}</p>
-                <div *ngFor="let viaje of usuario.viajes">
-                    
-                    <h4>Viaje Nº{{viaje.idViaje!+1}}</h4> 
-                    
-                    <div>
-                        <h4>Vuelo</h4>
-
-                        <div *ngFor="let itinerarie of viaje.vuelo?.itineraries">
-                            <div *ngFor="let segment of itinerarie.segments">
-                                <p>Número de Vuelo:{{segment.number}}</p>
-                                <p>Vuelo desde: {{segment.departure.iataCode}}</p>
-                                <p>Hasta: {{segment.arrival.iataCode}}</p>
-                                <p>Horario de salida: {{segment.departure.at}}</p>
-                                <p>Horario de llegada: {{segment.arrival.at}}</p>
+                <div *ngFor="let viaje of usuario.viajes" class="container">
+                    <p-card header="Reserva de Viaje" [style]="{ width: '500px' }">
+                        
+                        <ng-template pTemplate="header">
+                            <h4>Detalles del Viaje</h4>
+                        </ng-template>
+                
+                        <ng-template pTemplate="content">
+                            
+                            <h5>✈️ Vuelo</h5>
+                            <p><b>Aerolínea:</b> {{ viaje.vuelo?.validatingAirlineCodes }}</p>
+                            
+                            <div *ngFor="let itinerarie of viaje.vuelo?.itineraries">
+                                <div *ngFor="let segment of itinerarie.segments" class="segment">
+                                    <p><b>Salida:</b> {{ segment.departure.at }} - <b>Desde:</b> {{ segment.departure.iataCode }}</p>
+                                    <p><b>Llegada:</b> {{ segment.arrival.at }} - <b>Destino:</b> {{ segment.arrival.iataCode }}</p>
+                                    <p><b>Número de vuelo:</b> {{ segment.number }} | <b>Avión:</b> {{ segment.aircraft.code }}</p>
+                                </div>
+                                <hr>
                             </div>
-                            <p>Aerolinea: {{viaje.vuelo?.validatingAirlineCodes}}</p>
+                
+                            <h6>🛎️ Servicios Provistos</h6>
                             <div *ngFor="let traveler of viaje.vuelo?.travelerPricings">
                                 <div *ngFor="let fare of traveler.fareDetailsBySegment">
-                                    <p>Cabina:{{fare.cabin}}</p>
-                                    
-                                    <div *ngFor="let amenities of fare.amenities">
-                                        <p>description:{{amenities.description}}</p>
-                                        <p>Type: {{amenities.amenityType}}</p>
-                                        <p>isChargeable: {{amenities.isChargeable}}</p>
+                                    <p><b>Cabina:</b> {{ fare.cabin }}</p>
+                                    <div *ngFor="let amenitie of fare.amenities">
+                                        <p>🔹 <b>{{ amenitie.amenityType }}</b>: {{ amenitie.description }} ({{ amenitie.isChargeable ? 'Con cargo' : 'Incluido' }})</p>
                                     </div>
-
                                 </div>
+                            </div>
+                
+                            <hr>
+                
+                            <h5>🏨 Alojamiento</h5>
+                            <div *ngFor="let hotel of viaje.alojamiento?.data">
+                                <p><b>Hotel:</b> {{ hotel.hotel.name }}</p>
+                                <p><b>Ubicación:</b> Lat: {{ hotel.hotel.latitude }}, Lon: {{ hotel.hotel.longitude }}</p>
                                 
+                                <div *ngFor="let offers of hotel.offers" class="hotel-offer">
+                                    <p><b>Entrada:</b> {{ offers.checkInDate }} | <b>Salida:</b> {{ offers.checkOutDate }}</p>
+                                    <p><b>Huéspedes:</b> {{ offers.guests.adults }}</p>
+                
+                                    <h6>🛏️ Habitación</h6>
+                                    <p><b>Tipo:</b> {{ offers.room.type }} ({{ offers.room.typeEstimated }})</p>
+                                    <p>{{ offers.room.description.text }}</p>
+                
+                                    <h6>🚫 Políticas de Cancelación</h6>
+                                    <div *ngFor="let policies of offers.policies.cancellations">
+                                        <p>💰 <b>Precio:</b> {{ policies.amount }}</p>
+                                        <p>📅 <b>Fecha límite:</b> {{ policies.deadline }}</p>
+                                        <p>🌙 <b>Noches afectadas:</b> {{ policies.numberOfNights }}</p>
+                                        <p>⚖️ <b>Política:</b> {{ policies.type }}</p>
+                                        <p>📝 {{ policies.description }}</p>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-
-                    <div>
-                        <h4>Alojamiento</h4>
-
-                        <div *ngFor="let hotel of viaje.alojamiento?.data">
-                            <p>Nombre del hotel: {{hotel.hotel.name}}</p>
-                            <p>Ciudad: {{hotel.hotel.cityCode}}</p>
-                            <div *ngFor="let oferta of hotel.offers">
-                                <p>Horario de entrada: {{oferta.checkInDate}}</p>
-                                <p>Horario de Salida: {{oferta.checkOutDate}}</p>
-                                <p>Cantidad de huéspedes: {{oferta.guests.adults}}</p>
-                                <h6>Habitación</h6>
-                                <p>Tipo de Habitación: {{oferta.room.type}}</p>
-                                <p>Descripción de la habitación: {{oferta.room.description.text}}</p>
-                                <p>Tipo de cama: {{oferta.room.typeEstimated.bedType}}</p>
-                                <p>Número de camas: {{oferta.room.typeEstimated.beds}}</p>
-                                <p>Categoría:{{oferta.room.typeEstimated.category}}</p>
-                            </div>
-                        </div>
-                    </div>
-        
+                        </ng-template>
+                
+                        
+                        
+                    </p-card>
                 </div>
             </div>
             <div class="flex">

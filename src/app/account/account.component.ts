@@ -10,6 +10,14 @@ import { InputNumberModule } from 'primeng/inputnumber';
 import { Usuario } from '../usuario.interface';
 import { AuthService } from '../auth/auth.service';
 import { HeaderComponent } from "../header/header.component";
+import { FlightService } from '../services/flight.service';
+
+interface aerolinea{
+    data:data[]
+}
+interface data{
+  businessName:string
+}
 
 @Component({
   selector: 'app-account',
@@ -22,12 +30,14 @@ export class AccountComponent implements OnInit{
   
   formUser!:FormGroup;
   usuario!: Usuario;
-  
+  aerolinea:string|null = null;
+
   constructor(
     private userService:UsuarioService,
     private fu:FormBuilder,
     private messageService:MessageService,
-    private authService:AuthService){
+    private authService:AuthService,
+    private aerolineaService:FlightService){
       this.formUser = this.fu.group({
         email:['',Validators.required],
         nombreUsuario:['',Validators.required],
@@ -94,3 +104,7 @@ export class AccountComponent implements OnInit{
 
     
 }
+function next(value: Object): void {
+  throw new Error('Function not implemented.');
+}
+

@@ -8,7 +8,7 @@ import { Cancellations, Changes, HotelArray, HotelOffer, Offer, CardPolicies } f
 import { ButtonModule } from 'primeng/button';
 import { SharedService } from '../shared/shared.service';
 import { MessageService } from 'primeng/api';
-import { concatMap, from, tap, throwError } from 'rxjs';
+import { concatMap, from, switchMap, tap, throwError } from 'rxjs';
 
 interface HotelLi{
   hotelId:string;
@@ -56,49 +56,60 @@ export class HotelSearchComponent {
   }
   
 
-    onSubmit() {
-      if (this.hotelForm.valid) {
-        const formValue = this.hotelForm.value;
-        this.cityName = formValue.cityName;
-    
-        this.hotelList.obtenerIataCode(formValue.cityName).pipe(
-          concatMap((Response) => {
-            const cityData: Data = Response.data[0];
-            const iataCode = cityData.iataCode;
-            console.log(iataCode);
-            return this.hotelList.obtenerHotelesPorCiudad(iataCode);
-          }),
-          concatMap((Response) => {
-            this.hotels = Response.data;
-            console.log(this.hotels);
-    
-            this.dateErrorMessage = null;
-            const currentDate = new Date(Date.now());
-    
-            if (formValue.checkInDate < currentDate || formValue.checkOutDate < currentDate) {
-              this.dateErrorMessage = 'Las fechas de check-in y check-out deben ser iguales o posteriores a la fecha actual.';
-              return throwError(() => new Error(this.dateErrorMessage || 'Error de fechas'));
-            }
-            if (formValue.checkInDate > formValue.checkOutDate) {
-              this.dateErrorMessage = 'La fecha de check-out debe ser posterior a la fecha de check-in.';
-              return throwError(() => new Error(this.dateErrorMessage || 'Error de fechas'));
-            }
-    
-            return from(this.hotels).pipe(
-              concatMap((hotel) => 
-                this.hotelList.obtenerHoteles(
-                  hotel.hotelId, formValue.checkInDate, formValue.checkOutDate, formValue.adults, formValue.rooms
-                )
-              ),
-              tap((Response) => this.hotelsOffers!.push(Response))
-            );
-          })
-        ).subscribe({
-          error: (err) => console.error(err),
-          complete: () => console.log('Proceso de obtención de hoteles finalizado')
-        });
-      }
+  onSubmit() {
+    if (this.hotelForm.valid) {
+      const formValue = this.hotelForm.value;
+      this.cityName = formValue.cityName;
+  
+      this.hotelList.obtenerToken().pipe(
+        tap(tokenResponse => {
+          if (!tokenResponse.access_token) {
+            throw new Error('No se obtuvo un token válido');
+          }
+          console.log('✅ Token obtenido:', tokenResponse.access_token);
+        }),
+        switchMap(() => this.hotelList.obtenerIataCode(formValue.cityName)),
+        concatMap((Response) => {
+          const cityData: Data = Response.data[0];
+          const iataCode = cityData.iataCode;
+          console.log('📍 Código IATA:', iataCode);
+          return this.hotelList.obtenerHotelesPorCiudad(iataCode);
+        }),
+        concatMap((Response) => {
+          this.hotels = Response.data;
+          console.log('🏨 Hoteles encontrados:', this.hotels);
+  
+          this.dateErrorMessage = null;
+          const currentDate = new Date(Date.now());
+  
+          if (formValue.checkInDate < currentDate || formValue.checkOutDate < currentDate) {
+            this.dateErrorMessage = 'Las fechas de check-in y check-out deben ser iguales o posteriores a la fecha actual.';
+            return throwError(() => new Error(this.dateErrorMessage || 'Error de fechas'));
+          }
+          if (formValue.checkInDate > formValue.checkOutDate) {
+            this.dateErrorMessage = 'La fecha de check-out debe ser posterior a la fecha de check-in.';
+            return throwError(() => new Error(this.dateErrorMessage || 'Error de fechas'));
+          }
+  
+          return from(this.hotels).pipe(
+            concatMap((hotel) => 
+              this.hotelList.obtenerHoteles(
+                hotel.hotelId, formValue.checkInDate, formValue.checkOutDate, formValue.adults, formValue.rooms
+              )
+            ),
+            tap((Response) => {
+              console.log('🏨 Oferta de hotel obtenida:', Response);
+              this.hotelsOffers!.push(Response);
+            })
+          );
+        })
+      ).subscribe({
+        error: (err) => console.error('❌ Error en la búsqueda:', err.message),
+        complete: () => console.log('✅ Proceso de obtención de hoteles finalizado')
+      });
     }
+  }
+  
     
 
 

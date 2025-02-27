@@ -2,77 +2,73 @@
 <app-header></app-header>
 <h2>Lista de Viajes</h2>
 @if (usuario.viajes!=null){
-    <div *ngFor="let viaje of usuario.viajes">
-        <p-card header="Viaje" [style]="{ width: '400px' }">
+    <div *ngFor="let viaje of usuario.viajes" class="container">
+        <p-card header="Reserva de Viaje" [style]="{ width: '500px' }">
+            
             <ng-template pTemplate="header">
-                <img alt="Card" src="https://primefaces.org/cdn/primeng/images/card-ng.jpg" />
+                <h4>Detalles del Viaje</h4>
             </ng-template>
+    
             <ng-template pTemplate="content">
-                <div *ngFor="let viaje of usuario.viajes">
-                    <h5>Vuelo</h5>
-                    <p>Aerolinea:{{viaje.vuelo?.validatingAirlineCodes}}</p>
+                
+                <h5>✈️ Vuelo</h5>
+                <p><b>Aerolínea:</b> {{ viaje.vuelo?.validatingAirlineCodes }}</p>
+                
+                <div *ngFor="let itinerarie of viaje.vuelo?.itineraries">
+                    <div *ngFor="let segment of itinerarie.segments" class="segment">
+                        <p><b>Salida:</b> {{ segment.departure.at }} - <b>Desde:</b> {{ segment.departure.iataCode }}</p>
+                        <p><b>Llegada:</b> {{ segment.arrival.at }} - <b>Destino:</b> {{ segment.arrival.iataCode }}</p>
+                        <p><b>Número de vuelo:</b> {{ segment.number }} | <b>Avión:</b> {{ segment.aircraft.code }}</p>
+                    </div>
+                    <hr>
+                </div>
+    
+                <h6>🛎️ Servicios Provistos</h6>
+                <div *ngFor="let traveler of viaje.vuelo?.travelerPricings">
+                    <div *ngFor="let fare of traveler.fareDetailsBySegment">
+                        <p><b>Cabina:</b> {{ fare.cabin }}</p>
+                        <div *ngFor="let amenitie of fare.amenities">
+                            <p>🔹 <b>{{ amenitie.amenityType }}</b>: {{ amenitie.description }} ({{ amenitie.isChargeable ? 'Con cargo' : 'Incluido' }})</p>
+                        </div>
+                    </div>
+                </div>
+    
+                <hr>
+    
+                <h5>🏨 Alojamiento</h5>
+                <div *ngFor="let hotel of viaje.alojamiento?.data">
+                    <p><b>Hotel:</b> {{ hotel.hotel.name }}</p>
+                    <p><b>Ubicación:</b> Lat: {{ hotel.hotel.latitude }}, Lon: {{ hotel.hotel.longitude }}</p>
                     
-                    <div *ngFor="let itinerarie of viaje.vuelo?.itineraries">
-                        
-                        <div *ngFor="let segment of itinerarie.segments">
-                            <p>Hora de salida:{{segment.departure.at}}</p>
-                            <p>Origen:{{segment.departure.iataCode}}</p>
-
-                            <p>Hora de llegada:{{segment.arrival.at}}</p>
-                            <p>Destino: {{segment.arrival.iataCode}}</p>
-
-                            <p>Numero de vuelo:{{segment.number}}</p>
-                            <p>Avión: {{segment.aircraft.code}}</p>
-                            
+                    <div *ngFor="let offers of hotel.offers" class="hotel-offer">
+                        <p><b>Entrada:</b> {{ offers.checkInDate }} | <b>Salida:</b> {{ offers.checkOutDate }}</p>
+                        <p><b>Huéspedes:</b> {{ offers.guests.adults }}</p>
+    
+                        <h6>🛏️ Habitación</h6>
+                        <p><b>Tipo:</b> {{ offers.room.type }} ({{ offers.room.typeEstimated }})</p>
+                        <p>{{ offers.room.description.text }}</p>
+    
+                        <h6>🚫 Políticas de Cancelación</h6>
+                        <div *ngFor="let policies of offers.policies.cancellations">
+                            <p>💰 <b>Precio:</b> {{ policies.amount }}</p>
+                            <p>📅 <b>Fecha límite:</b> {{ policies.deadline }}</p>
+                            <p>🌙 <b>Noches afectadas:</b> {{ policies.numberOfNights }}</p>
+                            <p>⚖️ <b>Política:</b> {{ policies.type }}</p>
+                            <p>📝 {{ policies.description }}</p>
                         </div>
                     </div>
-
-                    <div *ngFor="let traveler of viaje.vuelo?.travelerPricings">
-                        <h6>Servicios Provistos</h6>
-                        <div *ngFor="let fare of traveler.fareDetailsBySegment">
-                            <p>Cabina: {{fare.cabin}}</p>
-                            <div *ngFor="let amenitie of fare.amenities">
-                                <p>Tipo de servicio: {{amenitie.amenityType}}</p>
-                                <p>Descripción: {{amenitie.description}}</p>
-                                <p>Con Cargo?:{{amenitie.isChargeable}}</p>
-                            </div>
-                        </div>
-                        <p></p>
-                    </div>
-                    <p>Alojamiento:</p>
-                    <div *ngFor="let hotel of viaje.alojamiento?.data">
-                        <p>Nombre del hotel:{{hotel.hotel.name}}</p>
-                        <p>Longitud:{{hotel.hotel.longitude}}</p>
-                        <p>Latitud:{{hotel.hotel.latitude}}</p>
-                        <div *ngFor="let offers of hotel.offers">
-                            <p>Fecha de Entrada:{{offers.checkInDate}}</p>
-                            <p>Fecha de Salida:{{offers.checkOutDate}}</p>
-                            <p>Número de huéspedes:{{offers.guests.adults}}</p>
-                            <h6>Habitación</h6>
-                            <p>Tipo de habitación:{{offers.room.type}}</p>
-                            <p>Tipo estimado:{{offers.room.typeEstimated}}</p>
-                            <p>Descripción: {{offers.room.description.text}}</p>
-                            <h6>Politicas de cancelación</h6>
-                            <div *ngFor="let policies of offers.policies.cancellations">
-                                <p>Precio a Pagar:{{policies.amount}}</p>
-                                <p>Fecha limite de cancelación:{{policies.deadline}}</p>
-                                <p>Número de noches:{{policies.numberOfNights}}</p>
-                                <p>tipo de politica:{{policies.type}}</p>
-                                <p>Descripcion:{{policies.description}}</p>
-                            </div>
-                        </div>
-                    </div>
-
+                </div>
+            </ng-template>
+    
+            <ng-template pTemplate="footer">
+                <div class="flex gap-3 mt-1">
+                    <button type="button" class="primary w-10" (click)="onDelete(viaje.idViaje)">🗑️ Eliminar</button>
                 </div>
             </ng-template>
             
-            <ng-template pTemplate="footer">
-            <div class="flex gap-3 mt-1">
-                <button type="button" class="primary w-10" (click)="onDelete(viaje.idViaje)">Delete</button>
-            </div>
-            </ng-template>
         </p-card>
     </div>
+    
 }
 @if(usuario.viajes==null){
     <button type="button" class="btn btn-primary" (click)="redirect()">NuevoViaje</button>
