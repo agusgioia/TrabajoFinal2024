@@ -50,55 +50,65 @@
     </form>
   <br>
   <div *ngIf="flights" class="grid p-fluid gap-4">
-    <p-card 
-    *ngFor="let offer of flights"
-    header="Vuelo"
-    class="col-12 md:col-6 lg:col-4">
-    <ng-template pTemplate="content">
-      <h2>Flight Offer: {{ offer.id }}</h2>
-    
-      <div *ngFor="let itinerary of offer.itineraries">
-        <h3>Itinerary</h3>
-        <p>Duration: {{ itinerary.duration }}</p>       
-        <p>Segments:</p> 
-        <div *ngFor="let segment of itinerary.segments">
-          <p>Flight Number: {{ segment.number }}</p>
-          <p>Aircraft: {{ segment.aircraft.code }}</p>
-          <p>Departure: {{ segment.departure.iataCode }} at {{ segment.departure.at }} </p>
-          <p>Arrival: {{ segment.arrival.iataCode }} at {{ segment.arrival.at }} </p>
-          <p>Duration: {{ segment.duration }}</p>
-        </div>
-      </div>
-    
-      <div>
-        <h3>Price</h3>
-        <p>Base: {{ offer.price.base }} {{ offer.price.currency }}</p>
-        <p>Grand Total: {{ offer.price.grandTotal }} {{ offer.price.currency }}</p>
-      </div>
-      
-      <div>
-        <h3>Traveler Pricing</h3>
-        <div *ngFor="let pricing of offer.travelerPricings">
-          <p>Traveler Type: Adult</p>
-          <p>Base Price: {{pricing.price.base}} {{ pricing.price.currency }}</p>
-          <p>Price: {{ pricing.price.total }} {{ pricing.price.currency }}</p>
-          <div *ngFor="let fare of pricing.fareDetailsBySegment">
-            <p>Cabin: {{fare.cabin}}</p>
-            <p>Amenities</p>
-              <div *ngFor="let amenities of fare.amenities">
-                <p>description:{{amenities.description}}</p>
-                <p>Type: {{amenities.amenityType}}</p>
-                <p>isChargeable: {{amenities.isChargeable}}</p>
+    <div class="grid">
+      <p-card 
+        *ngFor="let offer of flights"
+        header="Oferta de Vuelo"
+        class="col-12 md:col-6 lg:col-4 shadow-3">
+        
+        <ng-template pTemplate="content">
+          <div class="flex flex-column gap-3 p-3">
+            <h2 class="text-primary">Vuelo #{{ offer.id }}</h2>
+            
+            <div *ngFor="let itinerary of offer.itineraries" class="p-2 border-round surface-100">
+              <h3 class="text-900">Itinerario</h3>
+              <p class="text-sm"><strong>Duración:</strong> {{ itinerary.duration }}</p>
+              
+              <div *ngFor="let segment of itinerary.segments" class="p-2 border-left-4 border-primary">
+                <h4 class="text-primary">Segmento de Vuelo</h4>
+                <p><strong>Vuelo:</strong> {{ segment.number }} | <strong>Aeronave:</strong> {{ segment.aircraft.code }}</p>
+                <p><i class="pi pi-plane-departure"></i> <strong>Salida:</strong> {{ segment.departure.iataCode }} - {{ segment.departure.at }}</p>
+                <p><i class="pi pi-plane-arrival"></i> <strong>Llegada:</strong> {{ segment.arrival.iataCode }} - {{ segment.arrival.at }}</p>
+                <p><strong>Duración:</strong> {{ segment.duration }}</p>
               </div>
-          </div>          
-        </div>
-      </div>
-    </ng-template>
-    <ng-template pTemplate="footer">  
-      <p-button type="button" pButton label="Guardar" (click)="onGuardar(offer)"></p-button>
-    </ng-template>  
-    </p-card>
-  </div>  
-  </p-card>
+            </div>
+    
+            <p-divider></p-divider>
+    
+            <div class="p-2">
+              <h3 class="text-green-500">Precio</h3>
+              <p class="text-lg"><strong>Base:</strong> {{ offer.price.base }} {{ offer.price.currency }}</p>
+              <p class="text-xl text-red-500"><strong>Total:</strong> {{ offer.price.grandTotal }} {{ offer.price.currency }}</p>
+            </div>
+    
+            <p-divider></p-divider>
+    
+            <div>
+              <h3 class="text-900">Detalles de Pasajeros</h3>
+              <div *ngFor="let pricing of offer.travelerPricings" class="p-2 surface-200 border-round">
+                <p><strong>Tipo:</strong> Adulto</p>
+                <p><strong>Base:</strong> {{ pricing.price.base }} {{ pricing.price.currency }}</p>
+                <p><strong>Total:</strong> {{ pricing.price.total }} {{ pricing.price.currency }}</p>
+    
+                <div *ngFor="let fare of pricing.fareDetailsBySegment" class="border-left-4 border-orange-500 pl-3">
+                  <p><strong>Cabina:</strong> {{ fare.cabin }}</p>
+                  <h5>Amenidades</h5>
+                  <div *ngFor="let amenities of fare.amenities">
+                    <p-tag [severity]="amenities.isChargeable ? 'danger' : 'success'">
+                      {{ amenities.description }} - {{ amenities.amenityType }}
+                    </p-tag>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+    
+        <ng-template pTemplate="footer">  
+          <p-button type="button" label="Guardar" icon="pi pi-save" class="p-button-success" (click)="onGuardar(offer)"></p-button>
+        </ng-template>  
+      </p-card>
+    </div>
+    
 </div>
   

@@ -20,6 +20,7 @@ export class FlightService {
 
     constructor(private token:HotelListService,private http:HttpClient){}
 
+    //no implementado
     obtenerAerolinea(codAerolinea:string){
       return this.token.obtenerToken().pipe(
         switchMap(response => {

@@ -8,11 +8,13 @@ import { CardModule } from 'primeng/card';
 import { ButtonModule } from 'primeng/button';
 import { SharedService } from '../shared/shared.service';
 import { MessageService } from 'primeng/api';
+import { DividerModule } from 'primeng/divider';
+import { TagModule } from 'primeng/tag';
 
 @Component({
   selector: 'app-flight-search',
   standalone: true,
-  imports: [ReactiveFormsModule,FormsModule,CommonModule,ToastModule,CardModule,ButtonModule],
+  imports: [ReactiveFormsModule,FormsModule,CommonModule,ToastModule,CardModule,ButtonModule,DividerModule,TagModule],
   templateUrl: './flight-search.component.html',
   styleUrl: './flight-search.component.css'
 })

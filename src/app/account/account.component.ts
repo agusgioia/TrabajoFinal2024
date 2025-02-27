@@ -30,7 +30,6 @@ export class AccountComponent implements OnInit{
   
   formUser!:FormGroup;
   usuario!: Usuario;
-  aerolinea:string|null = null;
 
   constructor(
     private userService:UsuarioService,
@@ -103,8 +102,5 @@ export class AccountComponent implements OnInit{
   }
 
     
-}
-function next(value: Object): void {
-  throw new Error('Function not implemented.');
 }
 

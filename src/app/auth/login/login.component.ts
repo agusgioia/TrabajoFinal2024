@@ -35,7 +35,7 @@ export class LoginComponent {
   private messageService = inject(MessageService);
 
   form = this.fb.nonNullable.group({
-    email:['',[Validators.required]],
+    email:['',[Validators.required,Validators.email]],
     password:['',[Validators.required,Validators.minLength(6)]]
   }) 
 

@@ -12,6 +12,8 @@ import { CommonModule } from '@angular/common';
 })
 export class SharedComponent implements OnInit{
 
+  
+
   constructor(private sharedService:SharedService){}
 
   viaje:Viajes|null=null;
@@ -19,4 +21,5 @@ export class SharedComponent implements OnInit{
   ngOnInit(): void {
     this.viaje = this.sharedService.getViaje();
   }
+
 }
